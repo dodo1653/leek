@@ -1,5 +1,5 @@
+// CYBERLEEK OS — Vercel serverless API (CommonJS, zero deps)
 const { readFileSync } = require('node:fs')
-const { join } = require('node:path')
 
 // --- helpers ---
 function json(res, code, obj) {
@@ -8,11 +8,16 @@ function json(res, code, obj) {
   res.end(JSON.stringify(obj))
 }
 
-async function readBody(req) {
-  const chunks = []
-  for await (const c of req) chunks.push(c)
-  const s = Buffer.concat(chunks).toString('utf8')
-  try { return JSON.parse(s || '{}') } catch { return {} }
+function readBody(req) {
+  return new Promise((resolve) => {
+    const chunks = []
+    req.on('data', (c) => chunks.push(c))
+    req.on('end', () => {
+      const s = Buffer.concat(chunks).toString('utf8')
+      try { resolve(JSON.parse(s || '{}')) } catch { resolve({}) }
+    })
+    req.on('error', () => resolve({}))
+  })
 }
 
 // --- seed data ---
@@ -38,18 +43,14 @@ const LEEKS = [
 const CONFIG = {
   tokenName: '$LEEK', fullName: 'CYBERLEEK', ca: '', buyUrl: '',
   tickerItems: [
-    'PUBLISHERS\' FAVORITE VEGETABLE',
+    "PUBLISHERS' FAVORITE VEGETABLE",
     'GTA 6 FULL MAP — ARCHIVED FOREVER',
     'IF WE CAN REACH ROCKSTAR, NO ONE IS SAFE',
     'COMMUNITY VOTING · DECENTRALIZED LEEKS · NO WALLET CONNECT',
     'THOU SHALT NOT SELL DIGITAL PREORDERS',
     'THE CREW DESERVED BETTER',
   ],
-  balloon: {
-    enabled: true, icon: '🥬', title: 'CYBERLEEK OS',
-    body: 'New leeks detected.\nThe garden is watered.',
-    linkText: 'Open Leak Gallery',
-  },
+  balloon: { enabled: true, icon: '\u{1F96C}', title: 'CYBERLEEK OS', body: 'New leeks detected.\nThe garden is watered.', linkText: 'Open Leak Gallery' },
 }
 
 const ANNOUNCEMENTS = [
@@ -72,27 +73,18 @@ const CHAT_SEED = [
 
 const FORUM_SEED = {
   threads: [
-    {
-      id: 't1', title: '[MEGATHREAD] GTA 6 leak archive — every mirror, one place', author: 'archivist', pinned: true, ts: '2026-08-15T23:00:00Z',
-      posts: [
-        { id: 'p1', author: 'archivist', ts: '2026-08-15T23:00:00Z', body: 'Full map + all videos mirrored on arweave/upload.ee/temp.sh. If a link dies, check /api/leeks — newest mirrors auto-surface. DO NOT pay for what was already on the disc.' },
-        { id: 'p2', author: 'vice_council', ts: '2026-08-16T01:10:00Z', body: 'pinned forever. this is the library of alexandria but with more palm trees' },
-      ],
-    },
-    {
-      id: 't2', title: 'Commandment II violated AGAIN (you know the publisher)', author: 'dlc_truther', pinned: false, ts: '2026-08-22T12:00:00Z',
-      posts: [
-        { id: 'p1', author: 'dlc_truther', ts: '2026-08-22T12:00:00Z', body: '1MB unlock key for content already on disc. locked=true -> locked=false. $70 twice for the same product.' },
-        { id: 'p2', author: 'edict_follower', ts: '2026-08-22T13:45:00Z', body: 'public statement + apology + concrete commitment or the leeks do not stop.' },
-      ],
-    },
-    {
-      id: 't3', title: 'The Crew server shutdown — never forget', author: 'offline_forever', pinned: false, ts: '2026-08-19T09:00:00Z',
-      posts: [
-        { id: 'p1', author: 'offline_forever', ts: '2026-08-19T09:00:00Z', body: 'paid full price. servers died. solo campaign bricked. no refund. commandment III exists because of this.' },
-        { id: 'p2', author: 'bricked_and_broke', ts: '2026-08-19T10:30:00Z', body: 'single-player content depends on ONE thing: the hardware you already own.' },
-      ],
-    },
+    { id: 't1', title: '[MEGATHREAD] GTA 6 leak archive — every mirror, one place', author: 'archivist', pinned: true, ts: '2026-08-15T23:00:00Z', posts: [
+      { id: 'p1', author: 'archivist', ts: '2026-08-15T23:00:00Z', body: 'Full map + all videos mirrored on arweave/upload.ee/temp.sh. If a link dies, check /api/leeks — newest mirrors auto-surface. DO NOT pay for what was already on the disc.' },
+      { id: 'p2', author: 'vice_council', ts: '2026-08-16T01:10:00Z', body: 'pinned forever. this is the library of alexandria but with more palm trees' },
+    ]},
+    { id: 't2', title: 'Commandment II violated AGAIN (you know the publisher)', author: 'dlc_truther', pinned: false, ts: '2026-08-22T12:00:00Z', posts: [
+      { id: 'p1', author: 'dlc_truther', ts: '2026-08-22T12:00:00Z', body: '1MB unlock key for content already on disc. locked=true -> locked=false. $70 twice for the same product.' },
+      { id: 'p2', author: 'edict_follower', ts: '2026-08-22T13:45:00Z', body: 'public statement + apology + concrete commitment or the leeks do not stop.' },
+    ]},
+    { id: 't3', title: 'The Crew server shutdown — never forget', author: 'offline_forever', pinned: false, ts: '2026-08-19T09:00:00Z', posts: [
+      { id: 'p1', author: 'offline_forever', ts: '2026-08-19T09:00:00Z', body: 'paid full price. servers died. solo campaign bricked. no refund. commandment III exists because of this.' },
+      { id: 'p2', author: 'bricked_and_broke', ts: '2026-08-19T10:30:00Z', body: 'single-player content depends on ONE thing: the hardware you already own.' },
+    ]},
   ],
 }
 
@@ -103,11 +95,11 @@ const POLLS_SEED = [
 ]
 
 // --- in-memory state ---
-let chat = [...CHAT_SEED]
+let chat = CHAT_SEED.slice()
 let forum = JSON.parse(JSON.stringify(FORUM_SEED))
 let polls = JSON.parse(JSON.stringify(POLLS_SEED))
 let uid = 0
-const genId = () => Date.now().toString(36) + (++uid).toString(36) + Math.random().toString(36).slice(2, 6)
+function genId() { return Date.now().toString(36) + (++uid).toString(36) + Math.random().toString(36).slice(2, 6) }
 
 // --- handler ---
 module.exports = async function handler(req, res) {
@@ -117,73 +109,78 @@ module.exports = async function handler(req, res) {
     path = path.replace(/^\/api/, '') || '/health'
     const parts = path.split('/').filter(Boolean)
 
-    if (parts[0] === 'health') return json(res, 200, { status: 'ok', db: 'in-memory' })
-    if (parts[0] === 'config') return json(res, 200, CONFIG)
-    if (parts[0] === 'leeks') return json(res, 200, [...LEEKS].sort((a, b) => b.date.localeCompare(a.date)))
-    if (parts[0] === 'announcements') return json(res, 200, ANNOUNCEMENTS)
-
-    if (parts[0] === 'polls' && req.method === 'GET') return json(res, 200, polls)
-
-    if (parts[0] === 'poll' && parts[2] === 'vote' && req.method === 'POST') {
-      const id = parts[1]
-      const body = await readBody(req)
-      const idx = Number(body.choice)
-      const p = polls.find(p => p.id === id)
-      if (!p) return json(res, 404, { error: 'no such poll' })
-      if (p.finalized || p.status !== 'LIVE') return json(res, 400, { error: 'poll ended' })
-      if (!(idx >= 0 && idx < p.choices.length)) return json(res, 400, { error: 'bad choice' })
-      p.votes[idx]++
-      return json(res, 200, { ok: true, votes: p.votes })
+    // GET routes
+    if (req.method === 'GET') {
+      if (parts[0] === 'health') return json(res, 200, { status: 'ok' })
+      if (parts[0] === 'config') return json(res, 200, CONFIG)
+      if (parts[0] === 'leeks') return json(res, 200, LEEKS.slice().sort(function(a, b) { return b.date.localeCompare(a.date) }))
+      if (parts[0] === 'announcements') return json(res, 200, ANNOUNCEMENTS)
+      if (parts[0] === 'polls') return json(res, 200, polls)
+      if (parts[0] === 'chat') {
+        var list = chat
+        var before = u.searchParams.get('before')
+        if (before) { var i = list.findIndex(function(m) { return m.id === before }); if (i > 0) list = list.slice(0, i) }
+        return json(res, 200, list.slice(-200))
+      }
+      if (parts[0] === 'forum' && parts.length === 1) {
+        return json(res, 200, forum.threads.map(function(t) {
+          return Object.assign({}, t, { posts: undefined, postCount: t.posts.length, lastTs: t.posts[t.posts.length - 1].ts })
+        }))
+      }
+      if (parts[0] === 'forum' && parts.length === 2) {
+        var t = forum.threads.find(function(th) { return th.id === parts[1] })
+        return t ? json(res, 200, t) : json(res, 404, { error: 'not found' })
+      }
     }
 
-    if (parts[0] === 'chat' && req.method === 'GET') {
-      let list = chat
-      const before = u.searchParams.get('before')
-      if (before) { const i = list.findIndex(m => m.id === before); if (i > 0) list = list.slice(0, i) }
-      return json(res, 200, list.slice(-200))
-    }
-    if (parts[0] === 'chat' && req.method === 'POST') {
-      const body = await readBody(req)
-      const text = String(body.text || '').slice(0, 500).trim()
-      if (!text) return json(res, 400, { error: 'empty message' })
-      const name = String(body.name || '').slice(0, 24).trim() || 'Anon Leek'
-      const msg = { id: genId(), name, text, ts: new Date().toISOString() }
-      chat.push(msg)
-      chat = chat.slice(-500)
-      return json(res, 200, msg)
-    }
+    // POST routes
+    if (req.method === 'POST') {
+      var body = await readBody(req)
 
-    if (parts[0] === 'forum' && req.method === 'GET' && parts.length === 1) {
-      return json(res, 200, forum.threads.map(t => ({ ...t, posts: undefined, postCount: t.posts.length, lastTs: t.posts[t.posts.length - 1].ts })))
-    }
-    if (parts[0] === 'forum' && parts.length === 1 && req.method === 'POST') {
-      const body = await readBody(req)
-      const title = String(body.title || '').slice(0, 120).trim()
-      const text = String(body.body || '').slice(0, 2000).trim()
-      const author = String(body.author || '').slice(0, 24).trim() || 'anon_leek'
-      if (!title || !text) return json(res, 400, { error: 'title and body required' })
-      const t = { id: genId(), title, author, pinned: false, ts: new Date().toISOString(), posts: [{ id: genId(), author, ts: new Date().toISOString(), body: text }] }
-      forum.threads.unshift(t)
-      return json(res, 200, t)
-    }
-    if (parts[0] === 'forum' && parts.length === 2 && req.method === 'GET') {
-      const t = forum.threads.find(t => t.id === parts[1])
-      return t ? json(res, 200, t) : json(res, 404, { error: 'not found' })
-    }
-    if (parts[0] === 'forum' && parts.length === 3 && parts[2] === 'reply' && req.method === 'POST') {
-      const body = await readBody(req)
-      const text = String(body.body || '').slice(0, 2000).trim()
-      const author = String(body.author || '').slice(0, 24).trim() || 'anon_leek'
-      if (!text) return json(res, 400, { error: 'empty reply' })
-      const t = forum.threads.find(t => t.id === parts[1])
-      if (!t) return json(res, 404, { error: 'no such thread' })
-      t.posts.push({ id: genId(), author, ts: new Date().toISOString(), body: text })
-      return json(res, 200, t)
+      if (parts[0] === 'chat') {
+        var text = String(body.text || '').slice(0, 500).trim()
+        if (!text) return json(res, 400, { error: 'empty message' })
+        var name = String(body.name || '').slice(0, 24).trim() || 'Anon Leek'
+        var msg = { id: genId(), name: name, text: text, ts: new Date().toISOString() }
+        chat.push(msg)
+        chat = chat.slice(-500)
+        return json(res, 200, msg)
+      }
+
+      if (parts[0] === 'poll' && parts[2] === 'vote') {
+        var pid = parts[1]
+        var idx = Number(body.choice)
+        var p = polls.find(function(x) { return x.id === pid })
+        if (!p) return json(res, 404, { error: 'no such poll' })
+        if (p.finalized || p.status !== 'LIVE') return json(res, 400, { error: 'poll ended' })
+        if (!(idx >= 0 && idx < p.choices.length)) return json(res, 400, { error: 'bad choice' })
+        p.votes[idx]++
+        return json(res, 200, { ok: true, votes: p.votes })
+      }
+
+      if (parts[0] === 'forum' && parts.length === 1) {
+        var title = String(body.title || '').slice(0, 120).trim()
+        var ftext = String(body.body || '').slice(0, 2000).trim()
+        var author = String(body.author || '').slice(0, 24).trim() || 'anon_leek'
+        if (!title || !ftext) return json(res, 400, { error: 'title and body required' })
+        var thread = { id: genId(), title: title, author: author, pinned: false, ts: new Date().toISOString(), posts: [{ id: genId(), author: author, ts: new Date().toISOString(), body: ftext }] }
+        forum.threads.unshift(thread)
+        return json(res, 200, thread)
+      }
+
+      if (parts[0] === 'forum' && parts.length === 3 && parts[2] === 'reply') {
+        var rtext = String(body.body || '').slice(0, 2000).trim()
+        var rauthor = String(body.author || '').slice(0, 24).trim() || 'anon_leek'
+        if (!rtext) return json(res, 400, { error: 'empty reply' })
+        var rt = forum.threads.find(function(x) { return x.id === parts[1] })
+        if (!rt) return json(res, 404, { error: 'no such thread' })
+        rt.posts.push({ id: genId(), author: rauthor, ts: new Date().toISOString(), body: rtext })
+        return json(res, 200, rt)
+      }
     }
 
     return json(res, 404, { error: 'not found' })
   } catch (err) {
-    console.error('API error:', err)
-    return json(res, 500, { error: 'internal server error' })
+    return json(res, 500, { error: String(err) })
   }
 }
