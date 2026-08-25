@@ -1,9 +1,5 @@
-import { readFileSync } from 'node:fs'
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const PUBLIC = join(__dirname, '..', 'public')
+const { readFileSync } = require('node:fs')
+const { join } = require('node:path')
 
 // --- helpers ---
 function json(res, code, obj) {
@@ -17,14 +13,6 @@ async function readBody(req) {
   for await (const c of req) chunks.push(c)
   const s = Buffer.concat(chunks).toString('utf8')
   try { return JSON.parse(s || '{}') } catch { return {} }
-}
-
-function loadSeed(name, fallback) {
-  try {
-    return JSON.parse(readFileSync(join(__dirname, '..', 'data', name), 'utf8'))
-  } catch {
-    return fallback
-  }
 }
 
 // --- seed data ---
@@ -114,97 +102,88 @@ const POLLS_SEED = [
   { id: 'drive-by', status: 'ENDED', title: 'Next GTA 6 Video... Cinematic drive by?', choices: ['Car (DAY)', 'Car (NIGHT)', 'Motorcycle (NIGHT)', 'Plane (DAY)'], endsAt: '2026-08-20T09:26:57Z', finalized: true, votes: [80000000000000, 420000000000, 1000000000000, 147210959061841] },
 ]
 
-// --- in-memory state (persists across warm invocations) ---
-let chat = loadSeed('chat.json', null) || [...CHAT_SEED]
-let forum = loadSeed('forum.json', null) || JSON.parse(JSON.stringify(FORUM_SEED))
-let polls = loadSeed('polls.json', null) || JSON.parse(JSON.stringify(POLLS_SEED))
+// --- in-memory state ---
+let chat = [...CHAT_SEED]
+let forum = JSON.parse(JSON.stringify(FORUM_SEED))
+let polls = JSON.parse(JSON.stringify(POLLS_SEED))
 let uid = 0
 const genId = () => Date.now().toString(36) + (++uid).toString(36) + Math.random().toString(36).slice(2, 6)
 
 // --- handler ---
-export default async function handler(req, res) {
-  const u = new URL(req.url, 'http://localhost')
-  let path = decodeURIComponent(u.pathname).replace(/\/+$/, '') || '/api/health'
+module.exports = async function handler(req, res) {
+  try {
+    const u = new URL(req.url, 'http://localhost')
+    let path = decodeURIComponent(u.pathname).replace(/\/+$/, '') || '/api/health'
+    path = path.replace(/^\/api/, '') || '/health'
+    const parts = path.split('/').filter(Boolean)
 
-  // strip /api prefix
-  path = path.replace(/^\/api/, '') || '/health'
-  const parts = path.split('/').filter(Boolean)
+    if (parts[0] === 'health') return json(res, 200, { status: 'ok', db: 'in-memory' })
+    if (parts[0] === 'config') return json(res, 200, CONFIG)
+    if (parts[0] === 'leeks') return json(res, 200, [...LEEKS].sort((a, b) => b.date.localeCompare(a.date)))
+    if (parts[0] === 'announcements') return json(res, 200, ANNOUNCEMENTS)
 
-  // --- health ---
-  if (parts[0] === 'health') return json(res, 200, { status: 'ok', db: 'in-memory' })
+    if (parts[0] === 'polls' && req.method === 'GET') return json(res, 200, polls)
 
-  // --- config ---
-  if (parts[0] === 'config') return json(res, 200, CONFIG)
+    if (parts[0] === 'poll' && parts[2] === 'vote' && req.method === 'POST') {
+      const id = parts[1]
+      const body = await readBody(req)
+      const idx = Number(body.choice)
+      const p = polls.find(p => p.id === id)
+      if (!p) return json(res, 404, { error: 'no such poll' })
+      if (p.finalized || p.status !== 'LIVE') return json(res, 400, { error: 'poll ended' })
+      if (!(idx >= 0 && idx < p.choices.length)) return json(res, 400, { error: 'bad choice' })
+      p.votes[idx]++
+      return json(res, 200, { ok: true, votes: p.votes })
+    }
 
-  // --- leeks ---
-  if (parts[0] === 'leeks') {
-    return json(res, 200, [...LEEKS].sort((a, b) => b.date.localeCompare(a.date)))
+    if (parts[0] === 'chat' && req.method === 'GET') {
+      let list = chat
+      const before = u.searchParams.get('before')
+      if (before) { const i = list.findIndex(m => m.id === before); if (i > 0) list = list.slice(0, i) }
+      return json(res, 200, list.slice(-200))
+    }
+    if (parts[0] === 'chat' && req.method === 'POST') {
+      const body = await readBody(req)
+      const text = String(body.text || '').slice(0, 500).trim()
+      if (!text) return json(res, 400, { error: 'empty message' })
+      const name = String(body.name || '').slice(0, 24).trim() || 'Anon Leek'
+      const msg = { id: genId(), name, text, ts: new Date().toISOString() }
+      chat.push(msg)
+      chat = chat.slice(-500)
+      return json(res, 200, msg)
+    }
+
+    if (parts[0] === 'forum' && req.method === 'GET' && parts.length === 1) {
+      return json(res, 200, forum.threads.map(t => ({ ...t, posts: undefined, postCount: t.posts.length, lastTs: t.posts[t.posts.length - 1].ts })))
+    }
+    if (parts[0] === 'forum' && parts.length === 1 && req.method === 'POST') {
+      const body = await readBody(req)
+      const title = String(body.title || '').slice(0, 120).trim()
+      const text = String(body.body || '').slice(0, 2000).trim()
+      const author = String(body.author || '').slice(0, 24).trim() || 'anon_leek'
+      if (!title || !text) return json(res, 400, { error: 'title and body required' })
+      const t = { id: genId(), title, author, pinned: false, ts: new Date().toISOString(), posts: [{ id: genId(), author, ts: new Date().toISOString(), body: text }] }
+      forum.threads.unshift(t)
+      return json(res, 200, t)
+    }
+    if (parts[0] === 'forum' && parts.length === 2 && req.method === 'GET') {
+      const t = forum.threads.find(t => t.id === parts[1])
+      return t ? json(res, 200, t) : json(res, 404, { error: 'not found' })
+    }
+    if (parts[0] === 'forum' && parts.length === 3 && parts[2] === 'reply' && req.method === 'POST') {
+      const body = await readBody(req)
+      const text = String(body.body || '').slice(0, 2000).trim()
+      const author = String(body.author || '').slice(0, 24).trim() || 'anon_leek'
+      if (!text) return json(res, 400, { error: 'empty reply' })
+      const t = forum.threads.find(t => t.id === parts[1])
+      if (!t) return json(res, 404, { error: 'no such thread' })
+      t.posts.push({ id: genId(), author, ts: new Date().toISOString(), body: text })
+      return json(res, 200, t)
+    }
+
+    return json(res, 404, { error: 'not found' })
+  } catch (err) {
+    console.error('API error:', err)
+    return json(res, 500, { error: 'internal server error' })
   }
-
-  // --- announcements ---
-  if (parts[0] === 'announcements') return json(res, 200, ANNOUNCEMENTS)
-
-  // --- polls ---
-  if (parts[0] === 'polls' && req.method === 'GET') return json(res, 200, polls)
-
-  if (parts[0] === 'poll' && parts[2] === 'vote' && req.method === 'POST') {
-    const id = parts[1]
-    const body = await readBody(req)
-    const idx = Number(body.choice)
-    const p = polls.find(p => p.id === id)
-    if (!p) return json(res, 404, { error: 'no such poll' })
-    if (p.finalized || p.status !== 'LIVE') return json(res, 400, { error: 'poll ended' })
-    if (!(idx >= 0 && idx < p.choices.length)) return json(res, 400, { error: 'bad choice' })
-    p.votes[idx]++
-    return json(res, 200, { ok: true, votes: p.votes })
-  }
-
-  // --- chat ---
-  if (parts[0] === 'chat' && req.method === 'GET') {
-    let list = chat
-    const before = u.searchParams.get('before')
-    if (before) { const i = list.findIndex(m => m.id === before); if (i > 0) list = list.slice(0, i) }
-    return json(res, 200, list.slice(-200))
-  }
-  if (parts[0] === 'chat' && req.method === 'POST') {
-    const body = await readBody(req)
-    const text = String(body.text || '').slice(0, 500).trim()
-    if (!text) return json(res, 400, { error: 'empty message' })
-    const name = String(body.name || '').slice(0, 24).trim() || 'Anon Leek'
-    const msg = { id: genId(), name, text, ts: new Date().toISOString() }
-    chat.push(msg)
-    chat = chat.slice(-500)
-    return json(res, 200, msg)
-  }
-
-  // --- forum ---
-  if (parts[0] === 'forum' && req.method === 'GET' && parts.length === 1) {
-    return json(res, 200, forum.threads.map(t => ({ ...t, posts: undefined, postCount: t.posts.length, lastTs: t.posts[t.posts.length - 1].ts })))
-  }
-  if (parts[0] === 'forum' && parts.length === 1 && req.method === 'POST') {
-    const body = await readBody(req)
-    const title = String(body.title || '').slice(0, 120).trim()
-    const text = String(body.body || '').slice(0, 2000).trim()
-    const author = String(body.author || '').slice(0, 24).trim() || 'anon_leek'
-    if (!title || !text) return json(res, 400, { error: 'title and body required' })
-    const t = { id: genId(), title, author, pinned: false, ts: new Date().toISOString(), posts: [{ id: genId(), author, ts: new Date().toISOString(), body: text }] }
-    forum.threads.unshift(t)
-    return json(res, 200, t)
-  }
-  if (parts[0] === 'forum' && parts.length === 2 && req.method === 'GET') {
-    const t = forum.threads.find(t => t.id === parts[1])
-    return t ? json(res, 200, t) : json(res, 404, { error: 'not found' })
-  }
-  if (parts[0] === 'forum' && parts.length === 3 && parts[2] === 'reply' && req.method === 'POST') {
-    const body = await readBody(req)
-    const text = String(body.body || '').slice(0, 2000).trim()
-    const author = String(body.author || '').slice(0, 24).trim() || 'anon_leek'
-    if (!text) return json(res, 400, { error: 'empty reply' })
-    const t = forum.threads.find(t => t.id === parts[1])
-    if (!t) return json(res, 404, { error: 'no such thread' })
-    t.posts.push({ id: genId(), author, ts: new Date().toISOString(), body: text })
-    return json(res, 200, t)
-  }
-
-  return json(res, 404, { error: 'not found' })
 }
