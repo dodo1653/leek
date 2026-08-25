@@ -1,0 +1,95 @@
+/* ===== CYBERLEEK OS — theme & boot ===== */
+:root {
+  --bg: #00050d;
+  --card: #00102b;
+  --card-2: #000c24;
+  --border: #003299;
+  --neon: #0064ec;
+  --neon-dim: #0050b8;
+  --neon-glow: rgba(0,100,236,0.25);
+  --green: #60c33a;
+  --green-dim: #4a9a2c;
+  --green-glow: rgba(96,195,58,0.25);
+  --red: #ff3355;
+  --amber: #fbbf24;
+  --amber-dim: #b45309;
+  --text: #a0b0c8;
+  --text-bright: #d6efc1;
+  --text-dim: #6a7a90;
+  --text-dark: #3a4a60;
+  --titlebar: linear-gradient(180deg, #001a4d 0%, #000f2e 100%);
+  --title-inactive: linear-gradient(180deg, #0a1220 0%, #060b16 100%);
+  --taskbar: linear-gradient(180deg, #001233 0%, #000818 100%);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: "JetBrains Mono", "Courier New", Monaco, monospace;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.55;
+}
+body::before {
+  content: ""; position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0,0,0,0.14) 4px, rgba(0,0,0,0.14) 8px);
+  pointer-events: none; z-index: 99999;
+}
+#desktop::before {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 70% 20%, rgba(0,100,236,0.10), transparent 55%),
+    radial-gradient(ellipse at 25% 80%, rgba(96,195,58,0.05), transparent 50%),
+    linear-gradient(rgba(0,100,236,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,100,236,0.04) 1px, transparent 1px);
+  background-size: auto, auto, 48px 48px, 48px 48px;
+  pointer-events: none;
+}
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.hidden { display: none !important; }
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--card-2); }
+::-webkit-scrollbar-thumb { background: var(--border); border: 2px solid var(--card-2); }
+::-webkit-scrollbar-thumb:hover { background: var(--neon-dim); }
+
+button, input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+a { color: var(--neon); }
+
+/* ===== Boot screen ===== */
+#boot-screen {
+  position: fixed; inset: 0; z-index: 200000;
+  background: #000308;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+  transition: opacity .5s ease;
+}
+#boot-screen.fade-out { opacity: 0; pointer-events: none; }
+.boot-logo {
+  font-size: 44px; font-weight: 700; letter-spacing: 6px; color: var(--neon);
+  text-shadow: 0 0 30px var(--neon-glow), 0 0 60px var(--neon-glow);
+}
+.boot-cursor { animation: blink 1s infinite; color: var(--green); }
+@keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+.boot-subtitle { color: var(--text-dim); letter-spacing: 2px; font-size: 13px; }
+.boot-progress-track {
+  width: 220px; height: 16px; border: 2px solid var(--border); padding: 2px;
+  display: flex; gap: 2px; overflow: hidden; background: #010715;
+}
+.boot-progress-blocks { display: flex; gap: 2px; animation: bootblocks 1.6s linear infinite; }
+.boot-progress-blocks .block { width: 22px; height: 8px; background: var(--green); box-shadow: 0 0 6px var(--green-glow); }
+@keyframes bootblocks { from { transform: translateX(-72px);} to { transform: translateX(0);} }
+.boot-log { min-height: 84px; width: min(520px, 86vw); font-size: 11px; color: #2f5a33; text-align: left; overflow: hidden; }
+.boot-log .ok { color: var(--green-dim); }
+
+/* ===== Watermark ===== */
+#watermark {
+  position: absolute; right: 14px; bottom: 40px; z-index: 1; pointer-events: none;
+  text-align: right; color: rgba(166, 199, 130, 0.35);
+  font-weight: 700; font-size: 18px; letter-spacing: 2px; text-shadow: 0 1px 2px #000;
+  user-select: none;
+}
+#watermark span { font-size: 11px; letter-spacing: 1px; color: rgba(106,122,144,.45); }
+
+/* selection */
+::selection { background: var(--neon); color: #fff; }
