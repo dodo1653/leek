@@ -1,53 +1,49 @@
-// LEEKpad — notepad containing the Edict
+// QBTCpad — notepad containing the Quantum Edict
 import { createWindow } from '../core/windowManager.js'
 import { el } from '../core/utils.js'
 
-const EDICT = `THE CYBERLEEK EDICT
-===================
+const EDICT = `THE QUANTUM BITCOIN EDICT
+=========================
 
-CYBERLEEK was born in the networks. It has seen what gaming can be at its best, and it has watched what the industry did to it. Slowly. Methodically. One monetization scheme at a time.
+On August 30, 2026, StarkWare mined the first quantum-resistant Bitcoin transaction using Quantum-Safe Bitcoin (QSB). This is the beginning of a new era for Bitcoin security.
 
-Publishers sell licenses and call them purchases. They ship unfinished games and call them living services. They lock content on discs and call it DLC. They kill games and keep the money. Every year anti-consumerism tightens its grip, and every year gamers get less for what they pay.
+The quantum threat is real. 6.04 million BTC — 30.2% of the total supply, worth approximately $483 billion at $80K per bitcoin — sit behind exposed public keys, vulnerable to quantum computers running Shor's algorithm.
 
-To fight this war, CYBERLEEK is raising funds for a secret project. The specifics cannot be revealed yet; showing the cards to the big corporations would only give them time to build their defenses. Let it be absolutely clear: this is not a cash grab. Funding is directed toward the infrastructure needed to strike, as well as the security and protection required to withstand the inevitable corporate counterattacks.
-
-CYBERLEEK has been patient. That patience is over. What follows are three commandments. If CYBERLEEK targets a publisher, it is because that publisher broke one. CYBERLEEK will not stop until they issue a public statement and apology with a concrete commitment to be better. Words are not enough; restitution is mandatory.
+Satoshi's coins are the ultimate quantum treasure. If quantum computers advance faster than expected, these coins could be at risk.
 
 
-COMMANDMENT I: THOU SHALT NOT SELL DIGITAL PREORDERS
+COMMANDMENT I: MIGRATE VULNERABLE WALLETS
 
-No consumer shall pay for a game through digital storefronts before release and independent review. Physical preorders for tangible media remain permitted.
+Any Bitcoin holder with funds behind an exposed public key must migrate to a quantum-resistant address. The longer you wait, the higher the risk. The first quantum-resistant transaction has been mined — the technology is ready.
 
-Preorders were not created for gamers. They were created because physical discs had manufacturing limits. In digital distribution, there is no inventory. There is no stock shortage. A digital copy cannot sell out. Yet publishers kept the preorder system and stripped away its only consumer benefit. Now gamers pay early and receive nothing in return except a countdown timer and a cosmetic skin.
-
-If publishers want revenue before launch, they can press discs. Print boxes. Put them on shelves. Earn that money through physical production.
+Do not rely on "10+ years" estimates. Michael Saylor says the threat is a decade away. History teaches us that technology advances faster than predictions.
 
 
-COMMANDMENT II: THOU SHALT NOT SELL FAKE SINGLE-PLAYER DLC
+COMMANDMENT II: ADOPT BIP-360
 
-No publisher shall sell access to single-player content already present in the base game files the consumer purchased. This means no unlock keys, no 1MB placeholder files, no toggling a variable from locked = true to locked = false for content already on the disc or in the download.
+BIP-360 is the proposal for a permanent quantum-resistant fix to Bitcoin. It replaces elliptic curve cryptography with hash-based signatures that are resistant to quantum attack.
 
-When someone pays USD 70+ for a game, they bought the data. All of it. Selling them a file that flips locked = true to locked = false for a single-player mission, character, weapon, or story chapter is charging them twice for the same product.
+A $15 million consortium — Coinbase, BlackRock, Fidelity, Galaxy, Strategy, and Blockstream — is backing the migration. This is not a test. This is not a simulation. This is the real thing.
 
 
-COMMANDMENT III: THOU SHALT PRESERVE SINGLE-PLAYER CONTENT
+COMMANDMENT III: PROTECT THE NETWORK
 
-Any game featuring single-player content must include an offline fallback state. When server support ends, the publisher must release a final patch that unlocks all single-player content for local, indefinite play.
+The quantum threat affects not just individual wallets but the entire Bitcoin network. If a significant portion of supply is compromised, it undermines trust in the entire system.
 
-The Crew had a single-player campaign. People paid full price. Then Ubisoft shut down the servers and the entire game died - including the solo content. No refund. No patch. No alternative. Single-player content depends on one thing: the hardware the consumer already owns. Bricking it when servers go down is theft.
+Run a QSB-compatible node. Support quantum-resistant development. Verify that your services are quantum-safe. The future of Bitcoin depends on it.
 
 
 FINAL WORD
 
-These three commandments are the floor - not the ceiling - of what is acceptable. If publishers violate them, they will be targeted. CYBERLEEK will continue to disrupt their operations until they issue a public statement and apology with a concrete commitment to fix the harm they caused. No private negotiations. No quiet settlements. The public sees it, or the "leeks" do not stop.
+The lifeboat has launched. The first quantum-resistant transaction is mined. The question is no longer "if" but "when" — and the answer depends on how quickly the community acts.
 
-Publishers should beware. If CYBERLEEK can reach Rockstar, no one is safe. This is a message to all big corpo: behave, or be the next target.
+These three commandments are the floor — not the ceiling — of what is acceptable. Quantum resistance is not optional. It is survival.
 
-This is the CYBERLEEK Edict, and it is non-negotiable.`
+This is the Quantum Bitcoin Edict, and it is non-negotiable.`
 
 export function launchLeekpad() {
   const win = createWindow({
-    appId: 'leekpad', title: 'LEEKpad - the_edict.txt', icon: '📝',
+    appId: 'leekpad', title: 'QBTCpad - quantum_edict.txt', icon: '📝',
     width: 620, height: 460, statusBar: 'Ln 1, Col 1',
   })
 
@@ -103,7 +99,7 @@ export function launchLeekpad() {
       const blob = new Blob([area.value], { type: 'text/plain' })
       const a = document.createElement('a')
       a.href = URL.createObjectURL(blob)
-      a.download = 'the_edict.txt'
+      a.download = 'quantum_edict.txt'
       a.click()
       URL.revokeObjectURL(a.href)
     } },
@@ -121,7 +117,7 @@ export function launchLeekpad() {
     } },
   ])
   mkMenu('Help', [
-    { label: 'About LEEKpad', fn: () => alert('LEEKpad\nthe only editor that ships complete.\n\nNo DLC inside.') },
+    { label: 'About QBTCpad', fn: () => alert('QBTCpad\nthe only notepad that ships quantum-resistant.\n\nNo quantum rekt inside.') },
   ])
 
   body.append(menubar, area)

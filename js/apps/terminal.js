@@ -1,6 +1,6 @@
-// LEEK Terminal — command shell with secrets
+// QBTC Terminal — quantum-safe command shell
 import { createWindow } from '../core/windowManager.js'
-import { el, api, store } from '../core/utils.js'
+import { el } from '../core/utils.js'
 
 const BANNER = `
  ██████╗██╗   ██╗██████╗ ███████╗██████╗ ██╗     ███████╗██╗  ██╗
@@ -12,15 +12,15 @@ const BANNER = `
 
 export function launchTerminal() {
   const win = createWindow({
-    appId: 'terminal', title: 'LEEK Terminal — admin@cyberleek', icon: '⬛',
-    width: 620, height: 420, statusBar: 'LEEK-OS shell v6.0',
+    appId: 'terminal', title: 'QBTC Terminal — admin@quantum-safe', icon: '⬛',
+    width: 640, height: 440, statusBar: 'QSB-OS shell v1.0 — quantum-safe bitcoin',
   })
 
   const body = win.body
   body.style.overflow = 'hidden'
   const out = el('div', { class: 'term-body' })
   const inputRow = el('div', { class: 'term-input-row' })
-  const promptEl = el('span', { class: 'term-prompt' }, 'C:\\LEEK>')
+  const promptEl = el('span', { class: 'term-prompt' }, 'QSB:\\>')
   const input = el('input', { class: 'term-input', spellcheck: 'false', autocomplete: 'off' })
   inputRow.append(promptEl, input)
   out.append(inputRow)
@@ -28,7 +28,6 @@ export function launchTerminal() {
 
   const history = []
   let histIdx = -1
-  let quizMode = false
 
   function print(text, cls = '') {
     const line = el('div', { class: 'term-line ' + cls })
@@ -43,35 +42,17 @@ export function launchTerminal() {
   function banner() {
     for (const l of BANNER.split('\n')) print(l, 'term-sys')
     print('')
-    print('LEEK-OS shell v6.0 — the garden edition', 'term-warn')
-    print("type 'help' for commands. type carefully. the corpos are listening.", '')
+    print('QSB-OS shell v1.0 — the quantum resistance has arrived', 'term-warn')
+    print("type 'help' for commands. the quantum computers are listening.", '')
     print('')
   }
 
   async function exec(raw) {
     const cmd = raw.trim()
     if (!cmd) return
-    print(`C:\\LEEK> ${cmd}`, 'term-cmd')
+    print(`QSB:\\> ${cmd}`, 'term-cmd')
     history.push(cmd)
     histIdx = history.length
-
-    if (quizMode) {
-      quizMode = false
-      if (cmd === '327564') {
-        store.set('egg_step', Math.max(store.get('egg_step', 0), 1))
-        print('')
-        print('...processing...', 'term-sys')
-        print('ACCESS PHRASE ACCEPTED.')
-        print('')
-        print('key: V1CEC1TY', 'term-cmd')
-        print('now feed the key to Leek Explorer\'s address bar. it knows what to do.', 'term-warn')
-        print('')
-        return
-      }
-      print('wrong number. the rabbit returns to the shadows.', 'term-err')
-      print('')
-      return
-    }
 
     const [name, ...rest] = cmd.split(/\s+/)
     const arg = rest.join(' ')
@@ -80,91 +61,87 @@ export function launchTerminal() {
       case 'help':
         print('available commands:', 'term-sys')
         print('  help          this menu')
-        print('  edict         the three commandments')
-        print('  leaks         latest leak archive entries')
-        print('  poll          live community vote')
-        print('  buy           token info')
-        print('  whoami        identity check')
-        print('  date          important date')
-        print('  matrix        follow the white rabbit')
+        print('  status        QSB network status')
+        print('  threats       quantum threat assessment')
+        print('  qsb           quantum-safe bitcoin info')
+        print('  migrate       migration guide for vulnerable wallets')
+        print('  bip360        BIP-360 proposal details')
+        print('  price         current BTC price data')
+        print('  about         about this terminal')
         print('  clear         wipe terminal')
         break
-      case 'edict':
-        print('THE THREE COMMANDMENTS:', 'term-sys')
-        print('I.   thou shalt not sell digital preorders.')
-        print('II.  thou shalt not sell fake single-player DLC (locked=true -> locked=false).')
-        print('III. thou shalt preserve single-player content — offline forever.')
-        print('violations will be targeted. restitution is mandatory.', 'term-warn')
+      case 'status':
+        print('QSB NETWORK STATUS:', 'term-sys')
+        print('  Network:     Bitcoin Mainnet')
+        print('  Protocol:    QSB v1.0 (Quantum-Safe Bitcoin)')
+        print('  Consensus:   Proof of Work (hash-based signatures)')
+        print('  Uptime:      Since Aug 30, 2026')
+        print('  Status:      QUANTUM RESISTANT ✓')
+        print('')
+        print('First quantum-resistant tx mined by StarkWare.', 'term-warn')
         break
-      case 'leaks': {
-        try {
-          const leaks = await api('/api/leeks')
-          print('latest archive entries:', 'term-sys')
-          leaks.slice(0, 8).forEach((l, i) => {
-            print(`  ${String(i + 1).padStart(2)}. ${l.title}  (${l.date.slice(0, 10)})`)
-          })
-          print(`total objects archived: ${leaks.length}`)
-        } catch { print('archive unreachable. mirrors may be under attack.', 'term-err') }
+      case 'threats':
+        print('QUANTUM THREAT ASSESSMENT:', 'term-sys')
+        print('  6.04M BTC (30.2% of supply) — EXPOSED PUBLIC KEYS')
+        print('  Estimated value: ~$483B at $80K/BTC')
+        print('  Vulnerability:  Shor\'s algorithm can break ECDSA')
+        print('  Satoshi\'s coins: THE ULTIMATE QUANTUM TREASURE')
+        print('')
+        print('Michael Saylor says threat is 10+ years away.', 'term-warn')
+        print('StarkWare says: better safe than rekt.', 'term-warn')
         break
-      }
-      case 'poll': {
-        try {
-          const polls = await api('/api/polls')
-          const live = polls.find(p => p.status === 'LIVE')
-          if (!live) { print('no live vote right now.', 'term-warn'); break }
-          print(`LIVE VOTE: ${live.title}`, 'term-warn')
-          live.choices.forEach((c, i) => print(`  [${i}] ${c}`))
-          print('vote in Poll Booth on the desktop.')
-        } catch { print('poll daemon offline.', 'term-err') }
+      case 'qsb':
+        print('QUANTUM-SAFE BITCOIN (QSB):', 'term-sys')
+        print('  Type:       Hash-based signatures (not ECDSA)')
+        print('  Standard:   BIP-360 proposal')
+        print('  Status:     First tx mined Aug 30, 2026')
+        print('  Creator:    StarkWare')
+        print('')
+        print('QSB replaces elliptic curve cryptography with')
+        print('hash-based signatures — resistant to quantum attack.', 'term-sys')
         break
-      }
-      case 'buy':
-        print('$LEEK — contract address: TBA', 'term-warn')
-        print('no presale. no insiders. watch the ticker. be in the garden when it drops.')
+      case 'migrate':
+        print('WALLET MIGRATION GUIDE:', 'term-sys')
+        print('  Step 1: Check if your address has exposed pubkey')
+        print('  Step 2: Move funds to a QSB-compatible address')
+        print('  Step 3: Use BIP-360 compliant wallet')
+        print('  Step 4: Verify migration on block explorer')
+        print('')
+        print('6.04M BTC at risk — migrate before quantum computers arrive.', 'term-warn')
         break
-      case 'whoami':
-        print('an0n_leek — clearance LEVEL 6 // GARDEN ACCESS', 'term-sys')
+      case 'bip360':
+        print('BIP-360: QUANTUM-RESISTANT BITCOIN', 'term-sys')
+        print('  Proposal:   Replace ECDSA with hash-based signatures')
+        print('  Status:     Active development')
+        print('  Backed by:  $15M consortium')
+        print('  Members:    Coinbase, BlackRock, Fidelity,')
+        print('              Galaxy, Strategy, Blockstream')
+        print('')
+        print('This is the permanent fix for quantum vulnerability.', 'term-warn')
         break
-      case 'date':
-        print('9/18/2022 — the night everything changed.')
+      case 'price':
+        print('BTC MARKET DATA:', 'term-sys')
+        print('  Price:    ~$80,000')
+        print('  At Risk:  $483B in exposed public keys')
+        print('  Supply:   6.04M BTC vulnerable')
+        print('')
+        print('Data as of Aug 30, 2026.', 'term-sys')
         break
-      case 'matrix':
-        matrix()
+      case 'about':
+        print('QBTC TERMINAL v1.0', 'term-sys')
+        print('  Built for the quantum resistance era')
+        print('  First quantum-resistant tx: Aug 30, 2026')
+        print('  Mined by StarkWare using QSB protocol')
+        print('')
+        print('"The lifeboat has launched."', 'term-warn')
         break
       case 'clear':
         Array.from(out.children).forEach(c => { if (c !== inputRow) c.remove() })
         break
       default:
-        if (name.toLowerCase() === 'follow' && arg === 'rabbit') {
-          print('the white rabbit appears. it asks one question:', 'term-sys')
-          print('"i am the year the leak woke the world x the month of betrayal x the day of the leek. multiply them. speak the number."', 'term-warn')
-          quizMode = true
-          break
-        }
-        if (cmd.toLowerCase().includes('rabbit')) {
-          print('you sense movement in the hedges...', 'term-sys')
-          print("try: follow rabbit", 'term-warn')
-          break
-        }
         print(`'${name}' is not recognized as an internal or external command,\noperable program or batch file.`, 'term-err')
     }
     print('')
-  }
-
-  function matrix() {
-    const glyphs = 'ｦｧｨｩｪｫｬｭｮｯｱｲｳｴｵｶｷｸ01'
-    let ticks = 0
-    const t = setInterval(() => {
-      let s = ''
-      for (let i = 0; i < 62; i++) s += Math.random() < .7 ? glyphs[Math.floor(Math.random() * glyphs.length)] : ' '
-      print(s, 'term-sys')
-      if (++ticks >= 18) {
-        clearInterval(t)
-        print('wake up, leeker...', 'term-warn')
-        print('')
-      }
-      scrollBottom()
-    }, 100)
   }
 
   input.addEventListener('keydown', (e) => {

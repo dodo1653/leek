@@ -1,135 +1,105 @@
-// LEAK Mail — Outlook-style client full of leaked corpo emails (parody)
+// Threat Alerts — quantum-related notifications
 import { createWindow } from '../core/windowManager.js'
 import { el, fmtDate, store } from '../core/utils.js'
 
 const MAILS = [
   {
-    id: 'm1', folder: 'Corp Leaks', from: 'Mega-Publisher Inc — Legal', subj: 'CEASE AND DESIST (final) (for real this time)',
-    ts: '2026-08-25T09:12:00Z', unread: true,
-    body: `To whom it may concern at "CYBERLEEK":
+    id: 'm1', folder: 'Alerts', from: 'QSB Network', subj: 'CRITICAL: 6.04M BTC quantum vulnerable',
+    ts: '2026-08-30T09:12:00Z', unread: true,
+    body: `ALERT: 6.04 million BTC (30.2% of supply) have exposed public keys.
 
-We demand you stop leaking our games. Our lawyers have reviewed your on-chain posts and found them... legally inconvenient to address.
+At $80K/BTC, this represents approximately $483 billion vulnerable to quantum computers running Shor's algorithm.
 
-Please note that leaking violates the DMCA, the CDA, the ADA and several other three-letter acts we keep in a drawer.
+Satoshi's coins are among the most at-risk — they are the ultimate quantum treasure.
 
-We are watching you. We know you are in the garden. We have a gardener too.
+RECOMMENDATION: Migrate to QSB-compatible addresses immediately.`,
+  },
+  {
+    id: 'm2', folder: 'Inbox', from: 'StarkWare', subj: 'First quantum-resistant tx mined successfully',
+    ts: '2026-08-30T08:40:00Z', unread: true,
+    body: `The first quantum-resistant Bitcoin transaction has been mined.
+
+Block: #891,427
+Timestamp: Aug 30, 2026
+Protocol: QSB (Quantum-Safe Bitcoin)
+Signature: Hash-based (quantum-resistant)
+
+This is the lifeboat. Not everyday use — emergency escape.`,
+  },
+  {
+    id: 'm3', folder: 'Alerts', from: 'BIP-360 Consortium', subj: '$15M backing quantum-resistant migration',
+    ts: '2026-08-30T11:05:00Z', unread: true,
+    body: `The quantum-resistant Bitcoin consortium has formed.
+
+Members: Coinbase, BlackRock, Fidelity, Galaxy, Strategy, Blockstream
+Total backing: $15 million
+Goal: Support migration to BIP-360 quantum-resistant addresses
+
+The permanent fix is here. Act now.`,
+  },
+  {
+    id: 'm4', folder: 'Inbox', from: 'Michael Saylor', subj: 'RE: Quantum threat timeline',
+    ts: '2026-08-29T23:59:00Z', unread: true,
+    body: `The quantum threat is 10+ years away.
+
+Bitcoin has survived every threat so far. The community should focus on long-term value, not short-term panic.
+
+That said, I acknowledge the QSB technology is sound. Migration should happen when the time is right.`,
+  },
+  {
+    id: 'm5', folder: 'Alerts', from: 'Coinbase Advisory Board', subj: 'Quantum computing threat assessment',
+    ts: '2026-08-28T10:00:00Z', unread: true,
+    body: `Coinbase Quantum Advisory Board Assessment:
+
+Threat Level: MODERATE to HIGH
+Timeline: 5-10 years for sufficient quantum computing power
+Recommendation: Begin migration planning now
+
+The board recommends all exchange users check their quantum exposure.`,
+  },
+  {
+    id: 'm6', folder: 'Sent', from: 'you', subj: 'RE: Quantum threat timeline',
+    ts: '2026-08-30T10:30:00Z', unread: false,
+    body: `Michael,
+
+The lifeboat has launched. The first QSB tx is mined.
+
+10 years may not be enough. 6.04M BTC are vulnerable RIGHT NOW.
+
+Satoshi's coins are the ultimate quantum treasure. We cannot wait.
 
 Regards,
-Legal Dept. (intern)`,
+quantum_hodler`,
   },
   {
-    id: 'm2', folder: 'Inbox', from: 'EA-Style Entertainment', subj: 'Preorder exclusive: unlock the ABILITY TO PLAY',
-    ts: '2026-08-24T16:40:00Z', unread: true,
-    body: `Valued consumer,
-
-Preorder now to receive the DAY-ONE FUNCTIONALITY PACK:
-- the game runs
-- menus open
-- pressing start does something
-
-Also includes cosmetic skin "Patience of Job" for your troubles.
-
-Refunds available if the game is bad, which it will not be, which is why we also sell the insurance against it being good.
-
-— EA-Style Entertainment`,
-  },
-  {
-    id: 'm3', folder: 'Corp Leaks', from: 'Rockstar-Adjacent Studios — internal', subj: 'RE: RE: RE: how did they get the map AGAIN',
-    ts: '2026-08-24T11:05:00Z', unread: true,
-    body: `Team,
-
-Third time this quarter. The map is on every mirror, every arweave gateway, probably embroidered on somebody's pillow already.
-
-Stop replying-all. Stop emailing the leak drive link. And whoever keeps naming build servers "definitely_not_leaked_2" — HR would like a word.
-
-Priority now: ship something before the community finishes OUR game faster than us.
-
-— Studio Head`,
-  },
-  {
-    id: 'm4', folder: 'Inbox', from: 'white_rabbit', subj: '(no subject)',
-    ts: '2026-08-23T23:59:00Z', unread: true,
-    body: `the rabbit sees all who follow.
-
-the terminal hears whispers.
-the old browser keeps secrets.
-
-score 2013 when the bricks fall.
-the garden rewards patience.`,
-  },
-  {
-    id: 'm5', folder: 'Corp Leaks', from: 'Ubisoft-ish Games — Live Ops', subj: 'Sunsetting The-Crew-Like Title: FAQ for players',
-    ts: '2026-08-22T10:00:00Z', unread: true,
-    body: `Dear drivers,
-
-After careful consideration, we have decided your game no longer exists.
-
-Q: I paid $70?
-A: Yes.
-
-Q: Can I still play single-player?
-A: The single-player requires our servers to verify it is okay for you to play alone.
-
-Q: Refunds?
-A: We appreciate your passion.
-
-Drive safe (not possible),
-Live Ops`,
-  },
-  {
-    id: 'm6', folder: 'Inbox', from: 'DLC Pricing Task Force', subj: 'locked=true -> locked=false : Q4 revenue projections',
-    ts: '2026-08-20T14:22:00Z', unread: false,
-    body: `Attached: revenue model for shipping a 1KB file that changes one boolean in the config.
-
-Cost: $0.02 (bandwidth).
-Price: $19.99 ("Deluxe Mission Pack").
-Margin: 99,900%.
-
-Note: do not use the word "content" in marketing; use "experience".
-
-— Task Force`,
-  },
-  {
-    id: 'm7', folder: 'Sent', from: 'you', subj: 'RE: CEASE AND DESIST (final) (for real this time)',
-    ts: '2026-08-25T10:30:00Z', unread: false,
-    body: `Dear Legal Dept. (intern),
-
-No.
-
-Also your game was on the disc the whole time. Commandment II. Look it up — oh wait, you can't take down a blockchain.
-
-Stay hydrated,
-an0n_leek`,
-  },
-  {
-    id: 'm8', folder: 'Archive', from: 'BitcoinTalk — 2013', subj: 'I am HODLING',
+    id: 'm7', folder: 'Archive', from: 'BitcoinTalk — 2013', subj: 'I am HODLING',
     ts: '2013-12-18T10:03:00Z', unread: false,
     body: `I type d that tyitle twice because I knew it was wrong the first time. Still wrong. w/e.
 
 GF's out at a lesbian bar, BTC crashing WHY AM I HOLDING? I'LL TELL YOU WHY...
 
-(among the first stones of the garden. archived with respect.)`,
+(archived as a reminder — we were early then, and we are early now.)`,
   },
   {
-    id: 'm9', folder: 'Trash', from: 'scam_gardener', subj: '[SCAM - DO NOT OPEN] free LEEK giveaway!!!',
-    ts: '2026-08-25T08:00:00Z', unread: true,
-    body: `CONGRATULATIONS!!! you have been selected to DOUBLE YOUR LEEK!!!
+    id: 'm8', folder: 'Trash', from: 'scam_wallet', subj: '[SCAM - DO NOT OPEN] free QSB giveaway!!!',
+    ts: '2026-08-30T08:00:00Z', unread: true,
+    body: `CONGRATULATIONS!!! you have been selected to DOUBLE YOUR QSB!!!
 
 simply send your seed phrase, your house keys, and your childhood pet to:
 0x0000000000000000000000000000000000000000
 
 hurry limited time!!!
 
-[marked SCAM by the garden moderation daemon]`,
+[marked SCAM by the quantum security daemon]`,
   },
 ]
 
-const FOLDERS = ['Inbox', 'Corp Leaks', 'Sent', 'Archive', 'Trash']
+const FOLDERS = ['Inbox', 'Alerts', 'Sent', 'Archive', 'Trash']
 
 export function launchMail() {
   const win = createWindow({
-    appId: 'mail', title: 'LEAK Mail — MAPI connected', icon: '📧',
-    width: 780, height: 500, statusBar: 'Connected — inbox monitored by garden daemon',
+    appId: 'mail', title: 'Threat Alerts — quantum notifications', icon: '📧',
+    width: 780, height: 500, statusBar: 'Connected — quantum threat monitor active',
   })
 
   const state = { folder: 'Inbox', mailId: null }
@@ -179,8 +149,8 @@ export function launchMail() {
       previewEl.append(
         el('div', { style: 'display:grid;place-items:center;height:100%;text-align:center;color:var(--text-dim);' },
           el('div', {},
-            el('div', { style: 'font-size:42px;margin-bottom:8px;' }, '📬'),
-            'select an email to read the leaks')))
+            el('div', { style: 'font-size:42px;margin-bottom:8px;' }, '📧'),
+            'select a threat alert to read')))
       return
     }
     previewEl.append(
@@ -188,8 +158,8 @@ export function launchMail() {
       el('div', { class: 'mail-meta' }, `from ${m.from} · ${new Date(m.ts).toUTCString()}`),
       el('div', { class: 'mail-body-text' }, m.body),
       el('div', { class: 'mail-actions' },
-        el('button', { class: 'app-btn', onclick: () => alert('your reply was forwarded to the void.') }, 'Reply'),
-        el('button', { class: 'app-btn', onclick: () => alert('forwarded to /leek/ board. nice.') }, 'Forward'),
+        el('button', { class: 'app-btn', onclick: () => alert('your reply was forwarded to the quantum void.') }, 'Reply'),
+        el('button', { class: 'app-btn', onclick: () => alert('forwarded to the BTC forum.') }, 'Forward'),
         el('button', { class: 'app-btn', onclick: () => { m.unread = false; renderFolders(); renderList(); renderPreview() } }, 'Mark as Read'),
       ))
   }

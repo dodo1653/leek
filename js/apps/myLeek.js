@@ -1,13 +1,12 @@
-// My LEEK — system information hub
+// My Wallet — quantum risk status hub
 import { createWindow } from '../core/windowManager.js'
 import { el } from '../core/utils.js'
 import { APP_REGISTRY } from '../core/appRegistry.js'
-import { showBuyPopup } from '../main.js'
 
 export function launchMyLeek() {
   const win = createWindow({
-    appId: 'myLeek', title: 'My LEEK', icon: '🖥️', width: 640, height: 460,
-    statusBar: 'CYBERLEEK OS — garden access granted',
+    appId: 'myLeek', title: 'My Wallet', icon: '🖥️', width: 640, height: 460,
+    statusBar: 'QBTC OS — quantum-safe access granted',
   })
 
   const body = win.body
@@ -24,22 +23,22 @@ export function launchMyLeek() {
     view = renderHome
     body.innerHTML = ''
     const wrap = el('div', { class: 'sys-groups' })
-    wrap.append(groupTitle('SYSTEM'))
+    wrap.append(groupTitle('QUANTUM STATUS'))
     wrap.append(el('div', { class: 'sys-tiles' },
-      tile('ℹ️', 'System Information', () => renderSysInfo()),
-      tile('🥬', 'About CYBERLEEK', () => APP_REGISTRY.aboutLeek.launch()),
+      tile('ℹ️', 'Wallet Overview', () => renderSysInfo()),
+      tile('🔐', 'About QBTC', () => APP_REGISTRY.aboutLeek.launch()),
     ))
-    wrap.append(groupTitle('ARCHIVE DRIVES'))
+    wrap.append(groupTitle('QUANTUM TOOLS'))
     wrap.append(el('div', { class: 'sys-tiles' },
-      tile('💾', 'C: [LEAK_DRIVE]', () => APP_REGISTRY.gallery.launch()),
-      tile('🌐', 'N: [NETWORK_MIRRORS]', () => APP_REGISTRY.explorer.launch()),
-      tile('🗳️', '/dev/garden', () => APP_REGISTRY.pollBooth.launch()),
-      tile('⬛', 'C:\\LEEK\\shell.exe', () => APP_REGISTRY.terminal.launch()),
+      tile('🖼️', 'Q: [QUANTUM_VAULT]', () => APP_REGISTRY.gallery.launch()),
+      tile('🌐', 'Block Explorer', () => APP_REGISTRY.explorer.launch()),
+      tile('🗳️', 'Quantum Polls', () => APP_REGISTRY.pollBooth.launch()),
+      tile('⬛', 'QSB:\\> terminal', () => APP_REGISTRY.terminal.launch()),
     ))
-    wrap.append(groupTitle('CONTROL PANEL'))
+    wrap.append(groupTitle('CONTROLS'))
     wrap.append(el('div', { class: 'sys-tiles' },
-      tile('⚖️', 'The Edict', () => window.open('/about.html', '_blank')),
-      tile('💸', 'BUY $LEEK', () => showBuyPopup()),
+      tile('⚖️', 'BIP-360 Proposal', () => window.open('https://github.com/bitcoin/bips', '_blank')),
+      tile('📊', 'BTC Price', () => APP_REGISTRY.chart.launch()),
       tile('🗑️', 'Recycle Bin', () => APP_REGISTRY.recycleBin.launch()),
     ))
     body.append(wrap)
@@ -52,19 +51,19 @@ export function launchMyLeek() {
     wrap.append(el('button', { class: 'app-btn', onclick: renderHome }, '◂ Back'))
     const table = el('table', { class: 'info-table' })
     const rows = [
-      ['OS', 'CYBERLEEK OS build 6.0.2025 (GARDEN EDITION)'],
-      ['Registered to', 'an0n_leek'],
-      ['Uptime', 'since the 2022 leak'],
-      ['Processor', 'Vegetable Core i9 @ 4.20GHz (overclocked by community)'],
-      ['Memory', '64 GB decentralized leeks'],
-      ['Graphics', 'Rockstar-Adjacent RenderMax 6000'],
-      ['Firewall', 'EDICT-enabled — preorders blocked at kernel level'],
-      ['Contract address', 'TBA — watch the ticker'],
+      ['OS', 'QBTC-OS build 1.0.2026 (QUANTUM EDITION)'],
+      ['Registered to', 'quantum_hodler'],
+      ['Uptime', 'since Aug 30, 2026'],
+      ['Protocol', 'QSB v1.0 (hash-based signatures)'],
+      ['Security', 'QUANTUM RESISTANT ✓'],
+      ['At Risk', '6.04M BTC with exposed public keys'],
+      ['Threat Level', 'CRITICAL — migration needed'],
+      ['First QSB Tx', 'Mined by StarkWare, Aug 30, 2026'],
     ]
     for (const [k, v] of rows) table.append(el('tr', {}, el('td', {}, k), el('td', {}, v)))
-    wrap.append(groupTitle('SYSTEM INFORMATION'), table)
+    wrap.append(groupTitle('WALLET INFORMATION'), table)
     const note = el('div', { style: 'margin-top:12px;color:var(--text-dim);font-size:11.5px;' },
-      'This copy of CYBERLEEK OS is fully offline-capable. No server can take it from you.')
+      'Check your address quantum risk status in the Terminal. Use "threats" command.')
     wrap.append(note)
     body.append(wrap)
   }

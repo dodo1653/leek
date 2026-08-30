@@ -1,4 +1,4 @@
-// CYBERLEEK OS — taskbar
+// QBTC OS — taskbar
 import { renderStartMenu } from './startMenu.js'
 
 const tabs = new Map()
@@ -19,9 +19,9 @@ export function initTaskbar() {
   })
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideStartMenu() })
 
-  // frozen clock: the night GTA VI leaked
+  // frozen clock: the day QSB was mined
   const clock = document.getElementById('tray-clock')
-  if (clock) clock.textContent = '9/18/2022 4:26 AM'
+  if (clock) clock.textContent = '8/30/2026 2:07 PM'
 }
 
 export function closeStartMenuIfOpen() { hideStartMenu() }
@@ -39,7 +39,7 @@ function hideStartMenu() {
   startButton?.classList.remove('active')
 }
 
-window.addEventListener('leek-launch', hideStartMenu)
+window.addEventListener('qbtc-launch', hideStartMenu)
 
 export function addTaskbarTab(id, title, icon) {
   const container = document.getElementById('taskbar-apps')
@@ -50,9 +50,9 @@ export function addTaskbarTab(id, title, icon) {
   if (typeof icon === 'string' && icon.startsWith('/')) {
     const img = document.createElement('img'); img.src = icon; img.style.width = '13px'; img.style.height = '13px'
     iconEl.append(img)
-  } else iconEl.textContent = icon || '🥬'
+  } else iconEl.textContent = icon || '⚛️'
   labelEl.textContent = title
-  tab.addEventListener('click', () => window.dispatchEvent(new CustomEvent('leek-taskbar-tab', { detail: id })))
+  tab.addEventListener('click', () => window.dispatchEvent(new CustomEvent('qbtc-taskbar-tab', { detail: id })))
   tabs.set(id, { el: tab, minimized: false })
   container.append(tab)
 }

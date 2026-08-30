@@ -8,7 +8,7 @@ module.exports = async function handler(req, res) {
     var body = await d.readBody(req)
     var text = String(body.text || '').slice(0, 500).trim()
     if (!text) return d.json(res, 400, { error: 'empty message' })
-    var name = String(body.name || '').slice(0, 24).trim() || 'Anon Leek'
+    var name = String(body.name || '').slice(0, 24).trim() || 'anon_qubit'
     var msg = { id: d.genId(), name: name, text: text, ts: new Date().toISOString() }
     d.CHAT.push(msg)
     return d.json(res, 200, msg)

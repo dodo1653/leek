@@ -1,4 +1,4 @@
-// LEAKsweeper
+// Qubitsweeper — quantum minesweeper
 import { createWindow } from '../core/windowManager.js'
 import { el } from '../core/utils.js'
 
@@ -7,8 +7,8 @@ const NUM_COLORS = ['', 'var(--neon)', 'var(--green)', '#ff5577', '#b45309', '#0
 
 export function launchSweeper() {
   const win = createWindow({
-    appId: 'sweeper', title: 'LEAKsweeper', icon: '💣',
-    width: 420, height: 480, statusBar: 'first click is safe. unlike preorders.',
+    appId: 'sweeper', title: 'Qubitsweeper', icon: '💣',
+    width: 420, height: 480, statusBar: 'first click is safe. unlike quantum-vulnerable wallets.',
   })
 
   let diff = 'Easy'
@@ -132,8 +132,7 @@ export function launchSweeper() {
   function openCell(r, c) {
     const g = grid[r][c]
     if (g.open || g.flag) return
-    if (!g.mine && !grid[r][c]._seeded) { placeMines(r, c); grid[r][c]._seeded = true; // seed once
-      // ensure only seeded once globally
+    if (!g.mine && !grid[r][c]._seeded) { placeMines(r, c); grid[r][c]._seeded = true
       for (let rr = 0; rr < rows; rr++) for (let cc = 0; cc < cols; cc++) grid[rr][cc]._seeded = true
     }
     g.open = true
@@ -165,7 +164,7 @@ export function launchSweeper() {
     for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
       if (grid[r][c].mine && !grid[r][c].flag) { cellEls[r][c].classList.add('open'); cellEls[r][c].textContent = '💣' }
     }
-    overlay('you got LEAKED 💀', 'the corpos planted those.', reset)
+    overlay('QUANTUM DECOHERENCE 💀', 'the qubits collapsed.', reset)
   }
 
   function checkWin() {
@@ -173,7 +172,7 @@ export function launchSweeper() {
       wonFlag = true
       clearInterval(timer)
       faceBtn.textContent = '🥬'
-      overlay('GARDEN CLEARED 🥬', `${diff} · ${seconds}s`, reset)
+      overlay('QUANTUM SAFE 🥬', `${diff} · ${seconds}s · no qubits harmed`, reset)
     }
   }
 

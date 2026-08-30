@@ -1,6 +1,5 @@
-// CYBERLEEK OS — desktop (icons, marquee ticker, context menu, selection)
+// QBTC OS — desktop (icons, marquee ticker, context menu, selection)
 import { APP_REGISTRY } from './appRegistry.js'
-import { showBuyPopup } from '../main.js'
 import { el, api, store } from './utils.js'
 
 let serverApps = null
@@ -61,7 +60,7 @@ function markSeen(key) {
   const seen = store.get('seen', {})
   seen[key] = Date.now()
   store.set('seen', seen)
-  window.dispatchEvent(new CustomEvent('leek-seen', { detail: key }))
+    window.dispatchEvent(new CustomEvent('qbtc-seen', { detail: key }))
 }
 
 // ---- rubber-band selection ----
@@ -110,12 +109,10 @@ function initContextMenu() {
     menu = el('div', { class: 'context-menu' },
       menuItem('🔄 Refresh', () => location.reload()),
       sep(),
-      menuItem('🖥 Open $LEEK Terminal', () => APP_REGISTRY.terminal?.launch()),
-      menuItem('🖼 Leak Gallery', () => APP_REGISTRY.gallery?.launch()),
+      menuItem('⬛ QSB Terminal', () => APP_REGISTRY.terminal?.launch()),
+      menuItem('🖼 Quantum Gallery', () => APP_REGISTRY.gallery?.launch()),
       sep(),
-      menuItem('🥬 BUY $LEEK', () => showBuyPopup()),
-      sep(),
-      menuItem('ℹ Properties — The Edict', () => APP_REGISTRY.aboutLeek?.launch()),
+      menuItem('ℹ About QBTC', () => APP_REGISTRY.about?.launch()),
     )
     document.body.append(menu)
     const mw = 200, mh = menu.offsetHeight || 180
@@ -152,7 +149,7 @@ async function loadTicker() {
     )
     dock.innerHTML = ''
     dock.append(
-      el('div', { class: 'ticker-tag' }, el('span', { class: 'dot' }), 'LIVE FEED'),
+      el('div', { class: 'ticker-tag' }, el('span', { class: 'dot' }), 'QBTC LIVE'),
       el('div', { class: 'ticker-view' }, el('div', { class: 'ticker-track' }, mkSet(), mkSet()))
     )
   } catch {}

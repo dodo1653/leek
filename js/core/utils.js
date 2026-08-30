@@ -1,4 +1,4 @@
-// CYBERLEEK OS — shared utilities
+// QBTC OS — shared utilities
 let _uid = 0
 export function generateId() { return Date.now().toString(36) + (++_uid).toString(36) }
 
@@ -49,7 +49,7 @@ export function fmtDate(ts) {
 
 export const clamp = (v, min, max) => Math.min(Math.max(v, min), max)
 
-const LS_PREFIX = 'cleek_'
+const LS_PREFIX = 'qbtc_'
 export const store = {
   get(key, fb = null) {
     try { const v = localStorage.getItem(LS_PREFIX + key); return v == null ? fb : JSON.parse(v) } catch { return fb }

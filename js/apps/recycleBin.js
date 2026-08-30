@@ -1,20 +1,20 @@
-// Recycle Bin — games killed by corpos
+// Recycle Bin — quantum threat artifacts
 import { createWindow } from '../core/windowManager.js'
 import { el } from '../core/utils.js'
 
 const ITEMS = [
-  ['🎮', 'The Crew (2014)', 'servers sunset. solo campaign bricked. RIP 2014–2024'],
-  ['🎮', 'Always-Online Singleplayer: The Game', 'required internet to walk. internet went down. so did the game.'],
-  ['🎮', 'The $70 Unlock Key Incident', 'content shipped on disc. key sold separately. we archived it instead.'],
-  ['🎮', 'Digital Preorder Simulator 2025', 'pay now, receive nothing, get a skin for your patience'],
-  ['🎮', 'Deluxe Edition of a Game You Already Own', 'same files. new price tag. locked=true -> locked=false.'],
-  ['📄', 'customer_goodwill.txt', 'file too large for recycle bin'],
-  ['📄', 'publisher_apology_letter.doc', '(0 bytes)'],
+  ['🔑', 'Exposed ECDSA Keys', '6.04M BTC behind vulnerable elliptic curve signatures'],
+  ['💻', 'Quantum Computer (Prototype)', 'Shor\'s algorithm can break ECDSA — time is running out'],
+  ['📄', 'Satoshi\'s Public Key', 'the ultimate quantum treasure — exposed since 2009'],
+  ['🔐', 'Legacy Bitcoin Address', 'single-key signatures = quantum vulnerable'],
+  ['⚡', 'BIP-360 Draft', 'the permanent fix for quantum resistance — in progress'],
+  ['📄', 'quantum_threat_timeline.txt', 'when will quantum computers break BTC? estimates vary'],
+  ['📄', 'consortium_budget.doc', '$15M from Coinbase, BlackRock, Fidelity, Galaxy, Strategy, Blockstream'],
 ]
 
 export function launchRecycleBin() {
   const win = createWindow({
-    appId: 'recycleBin', title: 'Recycle Bin — games killed by corpos', icon: '🗑️',
+    appId: 'recycleBin', title: 'Recycle Bin — quantum threat artifacts', icon: '🗑️',
     width: 480, height: 400, statusBar: `${ITEMS.length} objects · do not empty`,
   })
 
@@ -33,12 +33,12 @@ export function launchRecycleBin() {
     el('button', {
       class: 'app-btn',
       onclick: () => {
-        if (confirm('this will restore dignity. proceed?')) alert('refused.\n\nwe do not delete history.')
+        if (confirm('this will restore quantum resistance. proceed?')) alert('refused.\n\nwe do not delete history.')
       },
     }, '🧹 Empty Bin'),
     el('button', {
       class: 'app-btn',
-      onclick: () => alert('some things cannot be restored.\nthat is why commandment III exists.'),
+      onclick: () => alert('some things cannot be restored.\nthat is why BIP-360 exists.'),
     }, '♻ Restore'),
   ))
 }

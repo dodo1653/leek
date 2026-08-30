@@ -1,13 +1,13 @@
-// LeekChat — AIM-style global chat
+// Quantum Chat — community discussion
 import { createWindow } from '../core/windowManager.js'
 import { el, esc, api, fmtTime, fmtDate, store, generateId } from '../core/utils.js'
 
-const CODENAMES = ['anon_leek_482', 'garden_ghost', 'vice_veggie', 'lurker_9000', 'paperhands_no_more']
+const CODENAMES = ['quantum_hodler_482', 'qsb_miner', 'hash_master', 'shor_breaker', 'bip360_supporter']
 
 export function launchChat() {
   const win = createWindow({
-    appId: 'chat', title: 'LeekChat — #garden-general', icon: '💬',
-    width: 540, height: 460, statusBar: 'connected · encrypted with vegetable-grade crypto',
+    appId: 'chat', title: 'Quantum Chat — #qsb-general', icon: '💬',
+    width: 540, height: 460, statusBar: 'connected · quantum-encrypted',
   })
 
   let alive = true
@@ -20,7 +20,7 @@ export function launchChat() {
     placeholder: CODENAMES[Math.floor(Math.random() * CODENAMES.length)],
     value: store.get('display_name', ''),
   })
-  const textInput = el('input', { class: 'app-input', style: 'flex:1;', placeholder: 'say something into the garden...', maxlength: '500' })
+  const textInput = el('input', { class: 'app-input', style: 'flex:1;', placeholder: 'discuss the quantum threat...', maxlength: '500' })
   const sendBtn = el('button', { class: 'app-btn primary' }, 'Send')
 
   const compose = el('div', { class: 'chat-compose' }, nameInput, textInput, sendBtn)
@@ -55,7 +55,7 @@ export function launchChat() {
     try {
       const msgs = await api('/api/chat')
       if (initial && !rendered.size) {
-        sys(`— connected to #garden-general · ${msgs.length} messages loaded · be nice or be leeked —`)
+        sys(`— connected to #qsb-general · ${msgs.length} messages loaded · quantum-safe discussion —`)
       }
       for (const m of msgs) renderMsg(m)
       if (!initial) scrollToNew()
@@ -80,7 +80,7 @@ export function launchChat() {
       pendingCount++
       scroll.scrollTop = scroll.scrollHeight
     } catch (e) {
-      sys(`— message rejected by the void (${e.message}) —`)
+      sys(`— message rejected by quantum void (${e.message}) —`)
     } finally {
       sendBtn.disabled = false
       textInput.focus()

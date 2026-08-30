@@ -1,4 +1,4 @@
-// Corpo Breakout — bricks of greed
+// Quantum Breakout — smash the quantum threats
 import { createWindow } from '../core/windowManager.js'
 import { el, store } from '../core/utils.js'
 
@@ -13,8 +13,8 @@ const LEVELS = [
 
 export function launchBreakout() {
   const win = createWindow({
-    appId: 'breakout', title: 'Corpo Breakout', icon: '🧱',
-    width: 580, height: 500, statusBar: 'smash the locked=true bricks',
+    appId: 'breakout', title: 'Quantum Breakout', icon: '🧱',
+    width: 580, height: 500, statusBar: 'smash the quantum-vulnerable bricks',
   })
 
   const W = 520, H = 360
@@ -24,7 +24,7 @@ export function launchBreakout() {
 
   const canvas = el('canvas', { class: 'game-canvas', width: String(W), height: String(H) })
   const ctx = canvas.getContext('2d')
-  const hud = el('div', { style: 'color:var(--text-dim);font-size:11px;padding:4px;text-align:center;' }, 'mouse / arrows to move · break every brick')
+  const hud = el('div', { style: 'color:var(--text-dim);font-size:11px;padding:4px;text-align:center;' }, 'mouse / arrows to move · break every quantum threat')
   const wrap = el('div', { style: 'display:flex;flex-direction:column;align-items:center;gap:4px;' })
   wrap.append(canvas, hud)
   body.append(wrap)
@@ -60,7 +60,7 @@ export function launchBreakout() {
     ball.vx = (Math.random() > .5 ? 1 : -1) * 3.2
     ball.vy = -3.8
     overlayActive = true
-    drawOverlay(`LEVEL ${level + 1}${level === 0 ? ': LOCKED=DLC' : ''}`, 'click or press SPACE to launch')
+    drawOverlay(`LEVEL ${level + 1}${level === 0 ? ': QUANTUM THREAT' : ''}`, 'click or press SPACE to launch')
   }
 
   function launch() {
@@ -91,7 +91,6 @@ export function launchBreakout() {
       if (ball.x < ball.r || ball.x > W - ball.r) ball.vx *= -1
       if (ball.y < ball.r) ball.vy *= -1
 
-      // paddle
       if (ball.vy > 0 && ball.y >= H - 24 - ball.r && ball.y <= H - 14 &&
         ball.x >= paddle.x - ball.r && ball.x <= paddle.x + paddle.w + ball.r) {
         const hit = (ball.x - (paddle.x + paddle.w / 2)) / (paddle.w / 2)
@@ -101,14 +100,12 @@ export function launchBreakout() {
         ball.vy = -Math.abs(speed * Math.cos(angle))
       }
 
-      // lost ball
       if (ball.y > H + 20) {
         lives--
         if (lives <= 0) return gameOver()
         resetBall()
       }
 
-      // bricks
       for (let i = bricks.length - 1; i >= 0; i--) {
         const b = bricks[i]
         if (ball.x > b.x - ball.r && ball.x < b.x + b.w + ball.r && ball.y > b.y - ball.r && ball.y < b.y + b.h + ball.r) {
@@ -125,10 +122,9 @@ export function launchBreakout() {
 
       if (!bricks.length) {
         score += 500
-        // easter egg hook after clearing level 1
         if (level === 0 && store.get('egg_step', 0) >= 2) {
           store.set('egg_step', 3)
-          window.dispatchEvent(new CustomEvent('leek-egg-complete'))
+          window.dispatchEvent(new CustomEvent('qbtc-egg-complete'))
           showSpecial()
           return
         }
@@ -149,7 +145,6 @@ export function launchBreakout() {
 
   function draw() {
     ctx.clearRect(0, 0, W, H)
-    // bricks
     for (const b of bricks) {
       ctx.fillStyle = b.color
       ctx.globalAlpha = b.hp > 1 ? 1 : .82
@@ -160,15 +155,12 @@ export function launchBreakout() {
       }
       ctx.globalAlpha = 1
     }
-    // paddle
     ctx.fillStyle = '#d6efc1'
     ctx.fillRect(paddle.x, H - 20, paddle.w, paddle.h)
-    // ball
     ctx.beginPath()
     ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2)
     ctx.fillStyle = '#fff'
     ctx.fill()
-    // hud text
     ctx.fillStyle = '#6a7a90'
     ctx.font = '12px "JetBrains Mono", monospace'
     ctx.textAlign = 'left'
@@ -180,18 +172,18 @@ export function launchBreakout() {
 
   function showSpecial() {
     overlayActive = true
-    drawOverlay('🐇 SIGNAL RECEIVED', 'check your desktop — the rabbit found you')
+    drawOverlay('🐇 QUANTUM SIGNAL RECEIVED', 'check your desktop — the rabbit found you')
     setTimeout(() => { endGame(true, 'EGG ROUTE COMPLETE') }, 2600)
   }
 
   function gameOver() {
     cancelAnimationFrame(raf)
-    drawOverlay('GAME OVER', `score ${score} — the corpos won this round`)
+    drawOverlay('GAME OVER', `score ${score} — the quantum threats won this round`)
     offerRetry()
   }
   function gameWin() {
     cancelAnimationFrame(raf)
-    drawOverlay('ALL LEVELS CLEARED 🥬', `final score ${score}`)
+    drawOverlay('ALL LEVELS CLEARED 🥬', `final score ${score} · quantum safe`)
     offerRetry()
   }
   function endGame(winFlag, msg) {

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vulnerable Supply — Quantum Threats to Bitcoin | QBTC</title>
+<meta name="description" content="6.04 million BTC are vulnerable to quantum attack. 30.2% of Bitcoin's supply — $483B at $80K — has exposed public keys. Satoshi's coins are the quantum treasure.">
+<link rel="icon" href="/assets/favicon.ico">
+<style>
+:root{--bg:#00050d;--card:#00102b;--border:#003299;--neon:#0064ec;--green:#60c33a;--text:#a0b0c8;--bright:#d6efc1;--dim:#6a7a90}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"JetBrains Mono","Courier New",monospace;background:var(--bg);color:var(--text);line-height:1.7;padding:40px 16px}
+main{max-width:820px;margin:0 auto}
+h1{color:var(--neon);letter-spacing:4px;font-size:2em;text-shadow:0 0 24px rgba(0,100,236,.3)}
+.sub{color:var(--dim);font-size:.85em;margin-bottom:26px}
+.entry{background:var(--card);border:1px solid var(--border);padding:14px;margin-bottom:10px}
+.entry h2{color:var(--bright);font-size:1em;margin-bottom:4px}
+.stat{color:var(--dim);font-size:.72em;letter-spacing:1px;margin-bottom:8px}
+.entry p{font-size:.9em;margin-bottom:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:20px 0}
+.grid .item{background:var(--card);border:1px solid var(--border);padding:14px}
+.grid .item .l{font-size:.7em;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.grid .item .v{color:var(--bright);font-weight:700;font-size:1.05em}
+.warn{color:var(--green)!important}
+nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:36px;border-top:1px solid var(--border);padding-top:20px}
+nav a{color:var(--neon);text-decoration:none;font-size:.85em;border:1px solid var(--border);padding:6px 12px}
+footer{text-align:center;color:var(--dim);font-size:.75em;letter-spacing:3px;text-transform:uppercase;margin-top:44px}
+</style>
+</head>
+<body>
+<main>
+<h1>⚠ VULNERABLE SUPPLY</h1>
+<div class="sub">6.04M BTC at risk · 30.2% of total supply · ~$483B exposed · the quantum clock is ticking</div>
+
+<div class="grid">
+<div class="item"><div class="l">Vulnerable BTC</div><div class="v">6,040,000 BTC</div></div>
+<div class="item"><div class="l">% of Total Supply</div><div class="v warn">30.2%</div></div>
+<div class="item"><div class="l">Value at $80K</div><div class="v warn">~$483,000,000,000</div></div>
+<div class="item"><div class="l">Total BTC Supply</div><div class="v">~20,000,000 BTC</div></div>
+</div>
+
+<div class="entry">
+<h2>Satoshi's Coins — The Quantum Treasure</h2>
+<div class="stat">~1,100,000 BTC · MINED 2009-2010 · NEVER MOVED</div>
+<p>The most famous coins in Bitcoin history. Mined by Satoshi Nakamoto in the earliest days of the network, these ~1.1 million BTC have never moved. Their public keys are exposed on the blockchain — a permanent target for any entity that achieves quantum supremacy. Whoever claims Satoshi's coins does not just steal money — they seize the origin story of Bitcoin itself.</p>
+</div>
+
+<div class="entry">
+<h2>P2PK Addresses — The Original Exposure</h2>
+<div class="stat">EARLY MINERS · PAY-TO-PUBLIC-KEY · FULLY EXPOSED</div>
+<p>Before BIP-16 (P2SH) and BIP-141 (SegWit), Bitcoin used Pay-to-Public-Key (P2PK) addresses. These reveal the full public key in every transaction. Satoshi's coins and early miner holdings use P2PK — the most quantum-vulnerable format in existence. These are not theoretical risks; they are sitting ducks.</p>
+</div>
+
+<div class="entry">
+<h2>Reused Addresses — The Double Spend Risk</h2>
+<div class="stat">MILLIONS OF ADDRESSES · PUBLIC KEY VISIBLE AFTER FIRST SPEND</div>
+<p>When a Bitcoin address receives funds, the public key is hidden behind a hash. But when you spend from that address, the public key is revealed on-chain. Any address that has ever sent a transaction has a visible public key. If that address has also received new funds, those funds are vulnerable. Millions of Bitcoin users are exposed without knowing it.</p>
+</div>
+
+<div class="entry">
+<h2>The Quantum Timeline</h2>
+<div class="stat">UNKNOWN · BUT THE DEFENSE MUST BE READY BEFORE THE ATTACK</div>
+<p>Quantum computing progress is accelerating. IBM, Google, and Chinese research labs are all racing toward cryptographic-scale quantum computers. The exact timeline is unknown, but the defense must be deployed before the attack arrives. Once a quantum computer can factor ECDSA, every exposed public key is compromised. There is no patch after the fact — only prevention.</p>
+</div>
+
+<div class="entry">
+<h2>The Lifeboat — QBTC Transaction</h2>
+<div class="stat">AUG 30 2026 · STARKWARE · FIRST QUANTUM-RESISTANT BITCOIN TX</div>
+<p>On August 30, 2026, StarkWare mined the first quantum-resistant Bitcoin transaction. Using QSB (Quantum-Safe Bitcoin) with hashing instead of elliptic curve cryptography, this transaction proved that Bitcoin can survive the quantum era. It is not a whitepaper. It is not a proposal. It is a lifeboat — already launched.</p>
+</div>
+
+<div class="entry">
+<h2>BIP-360 — The Permanent Fix</h2>
+<div class="stat">BITCOIN IMPROVEMENT PROPOSAL · HASH-BASED SIGNATURES</div>
+<p>BIP-360 defines the technical standard for quantum-resistant signatures on Bitcoin. By replacing elliptic curve cryptography with hash-based signatures, BIP-360 provides a backward-compatible path to quantum safety. The $15M consortium — Coinbase, BlackRock, Fidelity, Galaxy, Strategy, and Blockstream — is backing its implementation. This is Bitcoin's immune system against quantum attack.</p>
+</div>
+
+<nav><a href="/">◈ Desktop</a><a href="/about.html">About QBTC</a><a href="/token.html">$BTC Token</a><a href="/faq.html">FAQ</a></nav>
+<footer>QUANTUM-SAFE BITCOIN</footer>
+</main>
+</body>
+</html>

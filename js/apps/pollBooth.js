@@ -1,4 +1,4 @@
-// Poll Booth — decentralized community voting
+// Poll Booth — quantum threat community voting
 import { createWindow } from '../core/windowManager.js'
 import { el, api, fmtDate, store } from '../core/utils.js'
 
@@ -11,8 +11,8 @@ function compact(n) {
 
 export function launchPollBooth() {
   const win = createWindow({
-    appId: 'pollBooth', title: 'POLL BOOTH // decentralized voting', icon: '🗳️',
-    width: 560, height: 480, statusBar: 'no wallet connect · bags decide',
+    appId: 'pollBooth', title: 'POLL BOOTH // quantum threat voting', icon: '🗳️',
+    width: 560, height: 480, statusBar: 'no wallet connect · BTC holders decide',
   })
 
   const body = win.body
@@ -24,7 +24,7 @@ export function launchPollBooth() {
     let polls = []
     try { polls = await api('/api/polls') } catch {}
     if (!polls.length) {
-      body.append(el('div', { style: 'padding:20px;color:var(--text-dim);' }, 'no polls found. the garden is quiet.'))
+      body.append(el('div', { style: 'padding:20px;color:var(--text-dim);' }, 'no polls found. the quantum vacuum is quiet.'))
       return
     }
     for (const p of polls) body.append(pollCard(p))
@@ -32,7 +32,7 @@ export function launchPollBooth() {
 
   function header() {
     return el('div', { style: 'display:flex;align-items:center;gap:10px;padding:10px 14px;' },
-      el('span', { class: 'tag neon' }, 'ON-CHAIN VOTING'),
+      el('span', { class: 'tag neon' }, 'QUANTUM POLLS'),
       el('button', { class: 'app-btn', onclick: render }, '⟳ Refresh'))
   }
 
@@ -47,7 +47,7 @@ export function launchPollBooth() {
       el('span', { class: 'tag ' + (live ? 'live' : 'ended') }, live ? '● LIVE — VOTE NOW' : 'ENDED'),
       el('div', { class: 'poll-q' }, p.title),
       el('div', { class: 'poll-date' },
-        `created ${fmtDate(new Date(new Date(p.endsAt).getTime() - 86400000 * 2))} · ends ${fmtDate(p.endsAt)} · ${compact(total)} raw units voted`))
+        `created ${fmtDate(new Date(new Date(p.endsAt).getTime() - 86400000 * 2))} · ends ${fmtDate(p.endsAt)} · ${compact(total)} votes`))
 
     p.choices.forEach((choice, i) => {
       const votes = Number(p.votes[i] || 0)
@@ -60,7 +60,7 @@ export function launchPollBooth() {
           el('span', { class: 'pct' }, `${pct}%`)),
         el('div', { class: 'bar-track' }, el('div', { class: 'bar-fill' + (isWinner ? ' winner' : ''), style: `width:${pct}%` })),
         el('div', { style: 'display:flex;justify-content:space-between;margin-top:5px;font-size:10.5px;color:var(--text-dark);' },
-          el('span', { title: `${votes.toLocaleString()} raw units` }, `${compact(votes)} units`),
+          el('span', { title: `${votes.toLocaleString()} votes` }, `${compact(votes)} votes`),
           live && !voted
             ? el('button', {
                 class: 'app-btn primary', style: 'padding:2px 10px;',
@@ -77,7 +77,7 @@ export function launchPollBooth() {
       card.append(row)
     })
 
-    if (p.finalized) card.append(el('div', { style: 'margin-top:8px;color:var(--text-dark);font-size:11px;' }, '✔ finalized on-chain — results permanent'))
+    if (p.finalized) card.append(el('div', { style: 'margin-top:8px;color:var(--text-dark);font-size:11px;' }, '✔ finalized — results permanent'))
     return card
   }
 

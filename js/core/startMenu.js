@@ -1,4 +1,4 @@
-// CYBERLEEK OS — start menu
+// QBTC OS — start menu
 import { el } from './utils.js'
 import { APP_REGISTRY } from './appRegistry.js'
 
@@ -16,10 +16,10 @@ export function renderStartMenu(container) {
   container.innerHTML = ''
   container.append(
     el('div', { class: 'sm-banner' },
-      el('img', { src: '/assets/mascot.png', alt: '' }),
+      el('img', { src: '/assets/quantum-computer.jpg', alt: '' }),
       el('div', {},
-        el('div', { class: 'sm-user' }, 'an0n_leek'),
-        el('div', { class: 'sm-sub' }, 'clearance: LEVEL 6 // GARDEN ACCESS')
+        el('div', { class: 'sm-user' }, 'satoshi@qbtc'),
+        el('div', { class: 'sm-sub' }, 'clearance: QUANTUM-SAFE // QSB ACTIVE')
       )
     )
   )
@@ -29,15 +29,15 @@ export function renderStartMenu(container) {
   const right = el('div', { class: 'sm-col right' })
   columns.append(left, right)
 
-  const pinned = ['leekpad', 'explorer', 'sweeper', 'pollBooth', 'terminal', 'gallery', 'chart']
-  const quick = ['myLeek', 'updates', 'aboutLeek', 'recycleBin']
+  const pinned = ['notepad', 'explorer', 'sweeper', 'pollBooth', 'terminal', 'gallery', 'chart']
+  const quick = ['wallet', 'threats', 'about', 'recycleBin']
 
   const addItems = (target, keys) => {
     for (const k of keys) {
       const app = APP_REGISTRY[k]
       if (!app || !isOn(k)) continue
-      target.append(el('div', { class: 'sm-item', onclick: () => { window.dispatchEvent(new CustomEvent('leek-launch', { detail: k })) ; app.launch() } },
-        el('span', { class: 'sm-emoji' }, app.emoji || '🥬'),
+      target.append(el('div', { class: 'sm-item', onclick: () => { window.dispatchEvent(new CustomEvent('qbtc-launch', { detail: k })) ; app.launch() } },
+        el('span', { class: 'sm-emoji' }, app.emoji || '⚛️'),
         el('span', { class: 'sm-label' }, app.name)
       ))
     }
@@ -74,6 +74,6 @@ export function renderStartMenu(container) {
 
   container.append(el('div', { class: 'sm-footer' },
     el('div', { class: 'sm-foot-item', onclick: () => location.reload() }, '⟳', 'Restart'),
-    el('div', { class: 'sm-foot-item', onclick: () => window.open('https://discord.gg/2shot', '_blank') }, '◈', '2shot Discord')
+    el('div', { class: 'sm-foot-item', onclick: () => window.open('https://github.com/dodo1653/leek', '_blank') }, '◈', 'GitHub')
   ))
 }

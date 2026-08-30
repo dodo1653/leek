@@ -1,4 +1,4 @@
-// Solitaire — Klondike, preorder-free edition
+// Solitaire — Klondike, quantum-safe edition
 import { createWindow } from '../core/windowManager.js'
 import { el } from '../core/utils.js'
 
@@ -10,7 +10,7 @@ const CW = 66, CH = 92, GAP = 18
 
 export function launchSolitaire() {
   const win = createWindow({
-    appId: 'solitaire', title: 'Solitaire (preorder-free edition)', icon: '🃏',
+    appId: 'solitaire', title: 'Solitaire (quantum-safe edition)', icon: '🃏',
     width: 700, height: 540, statusBar: 'click to auto-move · drag sequences · double-click to foundation',
   })
 
@@ -107,22 +107,20 @@ export function launchSolitaire() {
         const ov = el('div', { style: 'position:absolute;inset:0;background:rgba(0,3,8,.88);display:grid;place-items:center;z-index:50;' },
           el('div', { style: 'text-align:center;' },
             el('div', { style: 'font-size:44px;margin-bottom:8px;' }, '🥬'),
-            el('div', { style: 'color:var(--green);font-weight:700;font-size:20px;margin-bottom:6px;' }, 'YOU BEAT THE PUBLISHERS'),
-            el('div', { style: 'color:var(--text-dim);margin-bottom:14px;' }, `${moves} moves · no DLC required`),
+            el('div', { style: 'color:var(--green);font-weight:700;font-size:20px;margin-bottom:6px;' }, 'QUANTUM SAFE WIN'),
+            el('div', { style: 'color:var(--text-dim);margin-bottom:14px;' }, `${moves} moves · no quantum rekt`),
             el('button', { class: 'app-btn primary', onclick: () => { ov.remove(); newGame() } }, 'New Game')))
         table.append(ov)
       }, 250)
     }
   }
 
-  // ---------- render ----------
   function render() {
     table.innerHTML = ''
     const W = table.clientWidth || 660
     const colW = Math.min(84, (W - 40) / 7)
     const slotX = (i) => 20 + i * ((W - 40 - CW) / 6)
 
-    // top row: stock, waste, gap, foundations
     const stockSlot = el('div', {
       class: 'pcard back', style: `left:${slotX(0)}px;top:16px;`,
       onclick: () => drawStock(),
@@ -170,7 +168,6 @@ export function launchSolitaire() {
     })
   }
 
-  // ---------- drag & drop ----------
   function bindCardDrag(elm, sourceCtx, stack) {
     elm.addEventListener('pointerdown', (e) => {
       e.preventDefault()
@@ -205,7 +202,6 @@ export function launchSolitaire() {
     const lx = x - tableRect.left, ly = y - tableRect.top
     const W = table.clientWidth || 660
     const colW = (W - 40 - CW) / 6
-    // foundation?
     if (ly < 120 && stack.length === 1) {
       const fi = Math.round((lx - 20) / colW) - 3
       if (fi >= 0 && fi < 4 && canFoundation(stack[0], foundations[fi])) {
@@ -216,7 +212,6 @@ export function launchSolitaire() {
         return
       }
     }
-    // tableau?
     if (ly >= 110) {
       const ti = Math.round((lx - 20) / colW)
       if (ti >= 0 && ti < 7 && !(sourceCtx.type === 'tableau' && sourceCtx.ti === ti)) {

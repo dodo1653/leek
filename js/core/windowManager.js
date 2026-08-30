@@ -1,4 +1,4 @@
-// CYBERLEEK OS — window manager
+// QBTC OS — window manager
 const windows = new Map()
 let topZ = 100
 let cascadeOffset = 0

@@ -1,11 +1,11 @@
-// /leek/ Board — bulletin board clone
+// BTC Forum — quantum-related discussion board
 import { createWindow } from '../core/windowManager.js'
 import { el, esc, api, fmtDate, fmtTime, store } from '../core/utils.js'
 
 export function launchForum() {
   const win = createWindow({
-    appId: 'forum', title: '/leek/ — leaks & preservation board', icon: '📋',
-    width: 740, height: 500, statusBar: 'anonymous posting enabled · rate limited by honor',
+    appId: 'forum', title: 'BTC Forum — quantum resistance board', icon: '📋',
+    width: 740, height: 500, statusBar: 'anonymous posting enabled · quantum-safe',
   })
 
   let view = 'list'
@@ -22,13 +22,13 @@ export function launchForum() {
   function renderSide() {
     side.innerHTML = ''
     side.append(
-      el('div', { style: 'color:var(--green);font-weight:700;letter-spacing:2px;font-size:15px;' }, '/leek/'),
+      el('div', { style: 'color:var(--green);font-weight:700;letter-spacing:2px;font-size:15px;' }, 'BTC/QSB'),
       el('div', { style: 'color:var(--text-dim);font-size:10.5px;margin-top:4px;line-height:1.6;' },
-        'decentralized leeks\ngame preservation\ncorpo watch'),
+        'quantum resistance\nBIP-360 discussion\nmigration guides'),
       el('hr', { style: 'border:none;border-top:1px solid var(--border);margin:8px 0;' }),
       el('button', { class: 'app-btn primary', style: 'width:100%;', onclick: () => composer() }, '+ New Thread'),
       el('div', { style: 'margin-top:14px;color:var(--text-dark);font-size:10px;line-height:1.8;' },
-        'rules:\n1. no preorders\n2. no fake DLC\n3. archive everything'))
+        'topics:\n1. quantum threat\n2. BIP-360\n3. migration\n4. QSB protocol'))
   }
 
   async function renderList() {
@@ -40,7 +40,7 @@ export function launchForum() {
       const threads = await api('/api/forum')
       main.innerHTML = ''
       main.append(el('div', { class: 'sys-group-title', style: 'margin-top:0;' }, `THREADS (${threads.length})`))
-      if (!threads.length) main.append(el('div', { style: 'color:var(--text-dim);padding:10px;' }, 'no threads yet. start the conversation.'))
+      if (!threads.length) main.append(el('div', { style: 'color:var(--text-dim);padding:10px;' }, 'no threads yet. start the quantum conversation.'))
       for (const t of threads) {
         main.append(el('div', {
           class: 'thread-row',
@@ -63,7 +63,7 @@ export function launchForum() {
       currentThread = t
       view = 'thread'
       main.innerHTML = ''
-      main.append(el('button', { class: 'app-btn', onclick: renderList }, '◂ back to /leek/'))
+      main.append(el('button', { class: 'app-btn', onclick: renderList }, '◂ back to forum'))
       main.append(el('h3', { style: 'color:var(--text-bright);margin:10px 0 12px;font-size:16px;' }, (t.pinned ? '📌 ' : '') + t.title))
       for (const p of t.posts) {
         main.append(el('div', { class: 'post' },
@@ -90,7 +90,7 @@ export function launchForum() {
     btn.addEventListener('click', async () => {
       const body = ta.value.trim()
       if (!body || btn.disabled) return
-      const author = name.value.trim() || 'anon_leek'
+      const author = name.value.trim() || 'quantum_anon'
       store.set('display_name', author)
       btn.disabled = true
       try {
@@ -110,12 +110,12 @@ export function launchForum() {
     main.innerHTML = ''
     main.append(el('button', { class: 'app-btn', onclick: renderList }, '◂ cancel'))
     const title = el('input', { class: 'app-input', style: 'width:100%;', placeholder: 'thread title', maxlength: '120' })
-    const ta = el('textarea', { class: 'app-input', style: 'width:100%;min-height:110px;resize:vertical;margin-top:6px;', placeholder: 'what needs archiving? what broke the edict?', maxlength: '2000' })
+    const ta = el('textarea', { class: 'app-input', style: 'width:100%;min-height:110px;resize:vertical;margin-top:6px;', placeholder: 'discuss quantum threat, BIP-360, migration...', maxlength: '2000' })
     const name = authorInput(store.get('display_name', ''))
     const post = el('button', { class: 'app-btn primary', style: 'margin-top:8px;' }, 'Create Thread')
     post.addEventListener('click', async () => {
       if (!title.value.trim() || !ta.value.trim() || post.disabled) return
-      const author = name.value.trim() || 'anon_leek'
+      const author = name.value.trim() || 'quantum_anon'
       store.set('display_name', author)
       post.disabled = true
       try {

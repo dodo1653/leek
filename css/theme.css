@@ -1,25 +1,29 @@
-/* ===== CYBERLEEK OS — theme & boot ===== */
+/* ===== QUANTUM BITCOIN OS — theme & boot ===== */
 :root {
-  --bg: #00050d;
-  --card: #00102b;
-  --card-2: #000c24;
-  --border: #003299;
-  --neon: #0064ec;
-  --neon-dim: #0050b8;
-  --neon-glow: rgba(0,100,236,0.25);
-  --green: #60c33a;
-  --green-dim: #4a9a2c;
-  --green-glow: rgba(96,195,58,0.25);
-  --red: #ff3355;
-  --amber: #fbbf24;
-  --amber-dim: #b45309;
-  --text: #a0b0c8;
-  --text-bright: #d6efc1;
-  --text-dim: #6a7a90;
-  --text-dark: #3a4a60;
-  --titlebar: linear-gradient(180deg, #001a4d 0%, #000f2e 100%);
-  --title-inactive: linear-gradient(180deg, #0a1220 0%, #060b16 100%);
-  --taskbar: linear-gradient(180deg, #001233 0%, #000818 100%);
+  --bg: #0a1628;
+  --panel: #0d1f3c;
+  --card: #0d1f3c;
+  --card-2: #0a1628;
+  --border: #1a3a5c;
+  --accent: #00d4ff;
+  --accent-secondary: #f7931a;
+  --neon: #00d4ff;
+  --neon-dim: #00a0cc;
+  --neon-glow: rgba(0,212,255,0.25);
+  --green: #00ff88;
+  --green-dim: #00cc6a;
+  --green-glow: rgba(0,255,136,0.25);
+  --red: #ff4444;
+  --amber: #f7931a;
+  --amber-dim: #c57415;
+  --text: #e0f0ff;
+  --text-bright: #ffffff;
+  --text-dim: #7a9cc6;
+  --text-dark: #1a3a5c;
+  --hover: rgba(0,212,255,0.15);
+  --titlebar: linear-gradient(180deg, #1a3a5c 0%, #0d1f3c 100%);
+  --title-inactive: linear-gradient(180deg, #0d1f3c 0%, #0a1628 100%);
+  --taskbar: linear-gradient(180deg, #0d1f3c 0%, #0a1628 100%);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,10 +43,10 @@ body::before {
 #desktop::before {
   content: ""; position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse at 70% 20%, rgba(0,100,236,0.10), transparent 55%),
-    radial-gradient(ellipse at 25% 80%, rgba(96,195,58,0.05), transparent 50%),
-    linear-gradient(rgba(0,100,236,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,100,236,0.04) 1px, transparent 1px);
+    radial-gradient(ellipse at 70% 20%, rgba(0,212,255,0.10), transparent 55%),
+    radial-gradient(ellipse at 25% 80%, rgba(247,147,26,0.05), transparent 50%),
+    linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
   background-size: auto, auto, 48px 48px, 48px 48px;
   pointer-events: none;
 }
@@ -60,7 +64,7 @@ a { color: var(--neon); }
 /* ===== Boot screen ===== */
 #boot-screen {
   position: fixed; inset: 0; z-index: 200000;
-  background: #000308;
+  background: #050e1a;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
   transition: opacity .5s ease;
 }
@@ -74,22 +78,22 @@ a { color: var(--neon); }
 .boot-subtitle { color: var(--text-dim); letter-spacing: 2px; font-size: 13px; }
 .boot-progress-track {
   width: 220px; height: 16px; border: 2px solid var(--border); padding: 2px;
-  display: flex; gap: 2px; overflow: hidden; background: #010715;
+  display: flex; gap: 2px; overflow: hidden; background: #050e1a;
 }
 .boot-progress-blocks { display: flex; gap: 2px; animation: bootblocks 1.6s linear infinite; }
 .boot-progress-blocks .block { width: 22px; height: 8px; background: var(--green); box-shadow: 0 0 6px var(--green-glow); }
 @keyframes bootblocks { from { transform: translateX(-72px);} to { transform: translateX(0);} }
-.boot-log { min-height: 84px; width: min(520px, 86vw); font-size: 11px; color: #2f5a33; text-align: left; overflow: hidden; }
+.boot-log { min-height: 84px; width: min(520px, 86vw); font-size: 11px; color: #1a5c3a; text-align: left; overflow: hidden; }
 .boot-log .ok { color: var(--green-dim); }
 
 /* ===== Watermark ===== */
 #watermark {
   position: absolute; right: 14px; bottom: 40px; z-index: 1; pointer-events: none;
-  text-align: right; color: rgba(166, 199, 130, 0.35);
+  text-align: right; color: rgba(0,212,255,0.35);
   font-weight: 700; font-size: 18px; letter-spacing: 2px; text-shadow: 0 1px 2px #000;
   user-select: none;
 }
-#watermark span { font-size: 11px; letter-spacing: 1px; color: rgba(106,122,144,.45); }
+#watermark span { font-size: 11px; letter-spacing: 1px; color: rgba(122,156,198,.45); }
 
 /* selection */
 ::selection { background: var(--neon); color: #fff; }
