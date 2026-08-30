@@ -5,7 +5,7 @@ import { APP_REGISTRY } from '../core/appRegistry.js'
 
 export function launchAboutLeek() {
   const win = createWindow({
-    appId: 'aboutLeek', title: 'About QBTC', iconImg: '/assets/mascot.png',
+    appId: 'aboutLeek', title: 'About QBTC', iconImg: '/assets/quantum-computer.jpg',
     width: 540, height: 490, statusBar: 'quantum-safe since 2026',
   })
 
@@ -13,7 +13,7 @@ export function launchAboutLeek() {
   body.style.overflow = 'auto'
   const wrap = el('div', { class: 'sys-groups', style: 'text-align:center;' })
 
-  wrap.append(el('img', { src: '/assets/mascot.png', alt: '', style: 'width:96px;height:96px;border-radius:50%;border:2px solid var(--neon);box-shadow:0 0 24px var(--neon-glow);margin:8px auto 12px;display:block;' }))
+  wrap.append(el('img', { src: '/assets/quantum-computer.jpg', alt: '', style: 'width:96px;height:96px;border-radius:50%;border:2px solid var(--neon);box-shadow:0 0 24px var(--neon-glow);margin:8px auto 12px;display:block;object-fit:cover;' }))
   wrap.append(el('div', { style: 'font-size:26px;font-weight:700;letter-spacing:6px;color:var(--neon);text-shadow:0 0 20px var(--neon-glow);' }, 'QBTC'))
   wrap.append(el('div', { style: 'color:var(--text-dim);font-size:11.5px;letter-spacing:2px;margin-top:2px;' }, 'quantum-safe bitcoin · hash-based signatures · no quantum rekt'))
   wrap.append(el('div', { style: 'color:var(--text-dark);font-size:10.5px;margin-top:2px;' }, 'QSB-OS version 1.0.2026 (QUANTUM EDITION)'))
